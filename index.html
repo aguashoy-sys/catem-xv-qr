@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
@@ -18,158 +19,158 @@
 
     body {
       margin: 0;
-      padding: 18px;
-      background: #f2f2f2;
-      font-family: Arial, sans-serif;
+      padding: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #222222;
       text-align: center;
-      color: #333;
     }
 
     .contenedor {
-      max-width: 460px;
+      max-width: 500px;
       margin: auto;
-      background: white;
-      padding: 28px 20px;
-      border-radius: 22px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.12);
     }
 
     .catem {
-      font-size: 48px;
+      font-size: 42px;
       font-weight: 900;
-      color: #111;
-      line-height: .9;
+      letter-spacing: 2px;
+      margin-top: 10px;
     }
 
     .xv {
-      font-size: 30px;
+      color: #7b1f32;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 3px;
+    }
+
+    .titulo {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .boton-escanear {
+      width: 100%;
+      padding: 18px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: #7b1f32;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .manual {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #dddddd;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #cccccc;
+      border-radius: 8px;
+      font-size: 18px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .boton-manual {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #333333;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #resultado {
+      display: none;
+      margin-top: 25px;
+      padding: 25px 15px;
+      border-radius: 15px;
+    }
+
+    .autorizado {
+      background: #e9f7ef;
+      border: 3px solid #28a745;
+    }
+
+    .rechazado {
+      background: #fdecec;
+      border: 3px solid #dc3545;
+    }
+
+    .estado {
+      font-size: 27px;
       font-weight: 900;
-      color: #9d1d30;
-      margin-top: 8px;
+      margin-bottom: 15px;
+    }
+
+    .nombre {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+
+    .empresa {
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .pulsera {
+      margin-top: 25px;
+      padding: 22px 10px;
+      border-radius: 12px;
+      font-size: 28px;
+      font-weight: 900;
     }
 
     .modulo {
-      font-size: 19px;
+      font-size: 22px;
       font-weight: bold;
-      color: #555;
-      margin: 12px 0 25px;
+      margin-top: 12px;
     }
 
-    button {
+    .siguiente {
       width: 100%;
-      border: none;
-      border-radius: 12px;
+      margin-top: 25px;
       padding: 17px;
+      border: none;
+      border-radius: 10px;
+      background: #222222;
+      color: white;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .scanner-btn {
-      background: #9d1d30;
-      color: white;
-      font-size: 20px;
-    }
-
-    .manual-btn {
-      margin-top: 12px;
-      background: #3f3f3f;
-      color: white;
-    }
-
-    .siguiente-btn {
-      display: none;
-      margin-top: 18px;
-      background: #9d1d30;
-      color: white;
-      font-size: 20px;
-    }
-
-    #reader {
-      width: 100%;
-      margin-top: 18px;
-      border-radius: 14px;
-      overflow: hidden;
-      display: none;
-      background: #111;
-    }
-
-    #instruccion {
-      display: none;
-      margin-top: 10px;
-      color: #666;
+    .qrtexto {
+      margin-top: 15px;
       font-size: 14px;
-    }
-
-    .separador {
-      display: flex;
-      align-items: center;
-      margin: 22px 0;
-      color: #888;
-    }
-
-    .separador:before,
-    .separador:after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: #bbb;
-    }
-
-    .separador span {
-      margin: 0 12px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 16px;
-      border: 2px solid #ccc;
-      border-radius: 11px;
-      text-align: center;
-      font-size: 17px;
-    }
-
-    #resultado {
-      display: none;
-      margin-top: 22px;
-      padding: 22px 15px;
-      border-radius: 14px;
-    }
-
-    .autorizado {
-      background: #d4edda;
-      color: #155724;
-      border: 2px solid #b7dfc2;
-    }
-
-    .rechazado {
-      background: #f8d7da;
-      color: #721c24;
-      border: 2px solid #efb8bd;
-    }
-
-    .estado {
-      font-size: 25px;
-      font-weight: 900;
-      margin-bottom: 12px;
-    }
-
-    .persona {
-      font-size: 20px;
-      line-height: 1.5;
-    }
-
-    .codigo {
-      font-size: 13px;
-      margin-top: 8px;
-      opacity: .7;
+      color: #777777;
     }
 
     .footer {
-      margin-top: 28px;
-      color: #9d1d30;
-      font-size: 21px;
+      margin-top: 30px;
+      color: #7b1f32;
       font-style: italic;
       font-weight: bold;
     }
@@ -177,6 +178,7 @@
   </style>
 
 </head>
+
 
 <body>
 
@@ -190,14 +192,13 @@
     — XV AÑOS —
   </div>
 
-  <div class="modulo">
-    MÓDULO DE RECEPCIÓN 1
+  <div class="titulo">
+    MÓDULO DE RECEPCIÓN
   </div>
 
 
   <button
-    id="btnScanner"
-    class="scanner-btn"
+    class="boton-escanear"
     onclick="iniciarScanner()">
 
     📷 ESCANEAR QR
@@ -207,30 +208,18 @@
 
   <div id="reader"></div>
 
-  <div id="instruccion">
-    Apunta la cámara al código QR.<br>
-    La lectura será automática.
-  </div>
 
-
-  <div id="zonaManual">
-
-    <div class="separador">
-      <span>ó</span>
-    </div>
+  <div class="manual">
 
     <input
       id="qrManual"
-      type="text"
-      placeholder="Ingresa el código manualmente"
-      autocomplete="off"
-    >
+      placeholder="CATEM-00001">
 
     <button
-      class="manual-btn"
+      class="boton-manual"
       onclick="validarManual()">
 
-      ✓ VALIDAR MANUALMENTE
+      VALIDAR MANUALMENTE
 
     </button>
 
@@ -240,16 +229,6 @@
   <div id="resultado"></div>
 
 
-  <button
-    id="btnSiguiente"
-    class="siguiente-btn"
-    onclick="siguientePersona()">
-
-    SIGUIENTE PERSONA →
-
-  </button>
-
-
   <div class="footer">
     Juntos hacemos más
   </div>
@@ -257,59 +236,73 @@
 </div>
 
 
+
 <script>
 
-/* ======================================
-   CONFIGURACIÓN
-====================================== */
+
+// ======================================================
+// CONFIGURACIÓN
+// ======================================================
+
+
+// IMPORTANTE:
+// Sustituye solamente lo que está entre comillas
+// por tu URL real de Apps Script.
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
+
 
 const MODULO =
   "RECEPCIÓN 1";
 
 
-let lector = null;
 
-let scannerActivo = false;
+let scanner = null;
 
 let procesando = false;
 
 
-/* ======================================
-   INICIAR ESCÁNER
-====================================== */
+
+// ======================================================
+// INICIAR CÁMARA
+// ======================================================
 
 async function iniciarScanner() {
 
-  if (scannerActivo || procesando) {
-    return;
-  }
 
-  document.getElementById("resultado")
-    .style.display = "none";
-
-  document.getElementById("btnSiguiente")
-    .style.display = "none";
-
-  document.getElementById("reader")
-    .style.display = "block";
-
-  document.getElementById("instruccion")
-    .style.display = "block";
+  procesando = false;
 
 
-  lector = new Html5Qrcode("reader");
+  document
+    .getElementById("resultado")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("reader")
+    .style.display =
+    "block";
 
 
   try {
 
-    await lector.start(
+
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    await scanner.start(
+
 
       {
-        facingMode: "environment"
+        facingMode:
+          "environment"
       },
+
 
       {
         fps: 10,
@@ -320,155 +313,143 @@ async function iniciarScanner() {
         }
       },
 
-      function(decodedText) {
 
-        qrDetectado(decodedText);
+      async function(texto) {
+
+
+        if (procesando) {
+          return;
+        }
+
+
+        procesando = true;
+
+
+        try {
+
+          await scanner.stop();
+
+        } catch (e) {}
+
+
+        document
+          .getElementById("reader")
+          .style.display =
+          "none";
+
+
+        validarQR(
+          texto.trim()
+        );
 
       },
 
-      function() {
 
-        // Continúa buscando.
+      function(error) {
+
+        // Los errores normales
+        // de lectura se ignoran.
 
       }
 
     );
 
 
-    scannerActivo = true;
-
-
   } catch (error) {
 
-    document.getElementById("reader")
-      .style.display = "none";
-
-    document.getElementById("instruccion")
-      .style.display = "none";
 
     alert(
-      "No se pudo abrir la cámara. " +
-      "Verifica los permisos del navegador."
+      "No se pudo iniciar la cámara. " +
+      "Verifica que Chrome tenga permiso para utilizarla."
     );
 
-    console.error(error);
-
   }
 
 }
 
 
-/* ======================================
-   QR DETECTADO
-====================================== */
 
-async function qrDetectado(texto) {
-
-  if (procesando) {
-    return;
-  }
-
-
-  procesando = true;
-
-
-  if (lector && scannerActivo) {
-
-    try {
-
-      await lector.stop();
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-
-  }
-
-
-  scannerActivo = false;
-
-
-  document.getElementById("reader")
-    .style.display = "none";
-
-  document.getElementById("instruccion")
-    .style.display = "none";
-
-
-  validarQR(texto.trim());
-
-}
-
-
-/* ======================================
-   VALIDACIÓN MANUAL
-====================================== */
+// ======================================================
+// VALIDACIÓN MANUAL
+// ======================================================
 
 function validarManual() {
 
-  if (procesando) {
-    return;
-  }
-
 
   const qr =
-    document.getElementById("qrManual")
+    document
+      .getElementById("qrManual")
       .value
       .trim();
 
 
   if (!qr) {
 
-    alert("Ingresa un código.");
+
+    alert(
+      "Escribe un código QR."
+    );
+
 
     return;
 
   }
 
 
-  procesando = true;
-
   validarQR(qr);
 
 }
 
 
-/* ======================================
-   ENVIAR QR AL SISTEMA
-====================================== */
+
+// ======================================================
+// ENVIAR QR AL SISTEMA
+// ======================================================
 
 async function validarQR(qr) {
 
+
   const resultado =
-    document.getElementById("resultado");
+    document.getElementById(
+      "resultado"
+    );
 
-
-  resultado.style.display = "block";
 
   resultado.className = "";
 
+  resultado.style.display =
+    "block";
+
+
   resultado.innerHTML =
-    '<div class="estado">⏳ VALIDANDO...</div>';
+    "<div class='estado'>" +
+    "VALIDANDO..." +
+    "</div>";
 
 
   try {
 
-    const respuesta = await fetch(
 
-      API_URL,
+    const respuesta =
+      await fetch(
 
-      {
-        method: "POST",
+        API_URL,
 
-        body: JSON.stringify({
-          qr: qr,
-          modulo: MODULO
-        })
-      }
+        {
 
-    );
+          method: "POST",
+
+          body: JSON.stringify({
+
+            qr: qr,
+
+            modulo: MODULO
+
+          })
+
+        }
+
+      );
 
 
     const datos =
@@ -490,41 +471,36 @@ async function validarQR(qr) {
 
     resultado.innerHTML =
 
-      '<div class="estado">' +
+      "<div class='estado'>" +
+      "⚠️ ERROR DE CONEXIÓN" +
+      "</div>" +
 
-      '⚠️ ERROR DE CONEXIÓN' +
+      "<div>" +
+      "No fue posible comunicarse con el sistema." +
+      "</div>" +
 
-      '</div>' +
-
-      '<div class="persona">' +
-
-      'No fue posible consultar el sistema.' +
-
-      '</div>';
-
-
-    document.getElementById("btnSiguiente")
-      .style.display = "block";
-
-
-    console.error(error);
+      botonSiguiente();
 
   }
-
-
-  procesando = false;
 
 }
 
 
-/* ======================================
-   MOSTRAR RESULTADO
-====================================== */
 
-function mostrarResultado(datos, qr) {
+// ======================================================
+// MOSTRAR RESULTADO
+// ======================================================
+
+function mostrarResultado(
+  datos,
+  qr
+) {
+
 
   const resultado =
-    document.getElementById("resultado");
+    document.getElementById(
+      "resultado"
+    );
 
 
   if (datos.autorizado) {
@@ -534,31 +510,63 @@ function mostrarResultado(datos, qr) {
       "autorizado";
 
 
+    const numero =
+      datos.moduloBebida;
+
+
+    const color =
+      datos.colorPulsera;
+
+
+    const estiloPulsera =
+      obtenerEstiloColor(
+        color
+      );
+
+
     resultado.innerHTML =
 
-      '<div class="estado">' +
 
-      '✅ ACCESO AUTORIZADO' +
+      "<div class='estado'>" +
+      "✅ ACCESO AUTORIZADO" +
+      "</div>" +
 
-      '</div>' +
 
-      '<div class="persona">' +
-
-      '<strong>' +
-
+      "<div class='nombre'>" +
       datos.nombre +
+      "</div>" +
 
-      '</strong><br>' +
 
+      "<div class='empresa'>" +
       datos.empresa +
+      "</div>" +
 
-      '</div>' +
 
-      '<div class="codigo">' +
+      "<div class='pulsera' " +
+      "style='" +
+      estiloPulsera +
+      "'>" +
 
+      "PULSERA " +
+      color +
+
+      "</div>" +
+
+
+      "<div class='modulo'>" +
+
+      "🥤 BEBIDAS — MÓDULO " +
+      numero +
+
+      "</div>" +
+
+
+      "<div class='qrtexto'>" +
       qr +
+      "</div>" +
 
-      '</div>';
+
+      botonSiguiente();
 
 
   } else {
@@ -570,60 +578,174 @@ function mostrarResultado(datos, qr) {
 
     resultado.innerHTML =
 
-      '<div class="estado">' +
 
-      '⛔ ACCESO DENEGADO' +
-
-      '</div>' +
-
-      '<div class="persona">' +
-
+      "<div class='estado'>" +
+      "⛔ " +
       datos.mensaje +
+      "</div>" +
 
-      '</div>' +
 
-      '<div class="codigo">' +
+      (
+        datos.nombre
 
+        ?
+
+        "<div class='nombre'>" +
+        datos.nombre +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      (
+        datos.empresa
+
+        ?
+
+        "<div class='empresa'>" +
+        datos.empresa +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      "<div class='qrtexto'>" +
       qr +
+      "</div>" +
 
-      '</div>';
+
+      botonSiguiente();
 
   }
-
-
-  document.getElementById("qrManual")
-    .value = "";
-
-
-  document.getElementById("btnSiguiente")
-    .style.display = "block";
 
 }
 
 
-/* ======================================
-   SIGUIENTE PERSONA
-====================================== */
+
+// ======================================================
+// COLOR VISUAL DE PULSERA
+// ======================================================
+
+function obtenerEstiloColor(
+  color
+) {
+
+
+  switch (color) {
+
+
+    case "ROJO":
+
+      return (
+        "background:#d32f2f;" +
+        "color:white;"
+      );
+
+
+    case "AZUL":
+
+      return (
+        "background:#1976d2;" +
+        "color:white;"
+      );
+
+
+    case "VERDE":
+
+      return (
+        "background:#388e3c;" +
+        "color:white;"
+      );
+
+
+    case "AMARILLO":
+
+      return (
+        "background:#fbc02d;" +
+        "color:#222;"
+      );
+
+
+    case "MORADO":
+
+      return (
+        "background:#7b1fa2;" +
+        "color:white;"
+      );
+
+
+    default:
+
+      return (
+        "background:#eeeeee;" +
+        "color:#222;"
+      );
+
+  }
+
+}
+
+
+
+// ======================================================
+// BOTÓN SIGUIENTE PERSONA
+// ======================================================
+
+function botonSiguiente() {
+
+
+  return (
+
+    "<button " +
+    "class='siguiente' " +
+    "onclick='siguientePersona()'>" +
+
+    "SIGUIENTE PERSONA →" +
+
+    "</button>"
+
+  );
+
+}
+
+
+
+// ======================================================
+// PREPARAR SIGUIENTE ESCANEO
+// ======================================================
 
 function siguientePersona() {
 
 
-  document.getElementById("resultado")
-    .style.display = "none";
+  document
+    .getElementById(
+      "resultado"
+    )
+    .style.display =
+    "none";
 
 
-  document.getElementById("btnSiguiente")
-    .style.display = "none";
-
-
-  procesando = false;
+  document
+    .getElementById(
+      "qrManual"
+    )
+    .value =
+    "";
 
 
   iniciarScanner();
 
 }
 
+
 </script>
+
 
 </body>
 
