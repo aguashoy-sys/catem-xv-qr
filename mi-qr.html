@@ -103,6 +103,11 @@
       cursor: not-allowed;
     }
 
+    #btnDescargar {
+      margin-top: 18px;
+      background: #222;
+    }
+
     #mensaje {
       display: none;
       margin-top: 20px;
@@ -166,7 +171,7 @@
       font-size: 14px;
       line-height: 1.5;
       color: #555;
-      margin-top: 15px;
+      margin-top: 18px;
     }
 
     .codigo {
@@ -253,9 +258,17 @@
 
       <div id="qrcode"></div>
 
+      <button
+        id="btnDescargar"
+        type="button"
+        onclick="descargarQR()"
+      >
+        ⬇ DESCARGAR MI QR
+      </button>
+
       <div class="instruccion">
         Presenta este código QR en la recepción del evento.
-        Te recomendamos guardar una captura de pantalla.
+        Te recomendamos descargarlo y guardar también una captura de pantalla.
       </div>
 
       <div id="codigo" class="codigo"></div>
@@ -434,6 +447,65 @@
 
       mensaje.className = "error";
       mensaje.textContent = texto;
+
+    }
+
+
+    function descargarQR() {
+
+      const contenedorQR =
+        document.getElementById("qrcode");
+
+      const canvas =
+        contenedorQR.querySelector("canvas");
+
+      const imagen =
+        contenedorQR.querySelector("img");
+
+      let urlImagen;
+
+
+      if (canvas) {
+
+        urlImagen =
+          canvas.toDataURL("image/png");
+
+      } else if (imagen) {
+
+        urlImagen =
+          imagen.src;
+
+      } else {
+
+        alert("No se encontró el código QR.");
+
+        return;
+      }
+
+
+      const nombreEmpleado =
+        document.getElementById("nombre")
+        .textContent
+        .trim()
+        .replace(/\s+/g, "_");
+
+
+      const enlace =
+        document.createElement("a");
+
+      enlace.href = urlImagen;
+
+      enlace.download =
+        "QR_CATEM_XV_" +
+        nombreEmpleado +
+        ".png";
+
+
+      document.body.appendChild(enlace);
+
+      enlace.click();
+
+      document.body.removeChild(enlace);
 
     }
 
