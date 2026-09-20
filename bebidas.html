@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>CATEM XV AÑOS - Bebidas</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #222;
+      text-align: center;
+    }
+
+    .contenedor {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .catem {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin-top: 10px;
+    }
+
+    .xv {
+      color: #7b1f32;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .titulo {
+      margin-top: 22px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .modulo-actual {
+      margin-top: 8px;
+      font-size: 30px;
+      font-weight: 900;
+      color: #7b1f32;
+    }
+
+    .boton-escanear {
+      width: 100%;
+      padding: 18px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: #7b1f32;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .manual {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 18px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .boton-manual {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #resultado {
+      display: none;
+      margin-top: 25px;
+      padding: 25px 15px;
+      border-radius: 15px;
+    }
+
+    .correcto {
+      background: #e9f7ef;
+      border: 3px solid #28a745;
+    }
+
+    .rechazado {
+      background: #fdecec;
+      border: 3px solid #dc3545;
+    }
+
+    .estado {
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .nombre {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 18px;
+    }
+
+    .empresa {
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .pulsera {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .disponibles {
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .numero-disponibles {
+      font-size: 52px;
+      font-weight: 900;
+      margin-top: 5px;
+    }
+
+    .pregunta {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .botones-cantidad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .boton-cantidad {
+      padding: 20px 5px;
+      border: none;
+      border-radius: 12px;
+      background: #7b1f32;
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .boton-cantidad:disabled {
+      opacity: .5;
+    }
+
+    .siguiente {
+      width: 100%;
+      margin-top: 25px;
+      padding: 17px;
+      border: none;
+      border-radius: 10px;
+      background: #222;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .aviso-modulo {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #fff3cd;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #7b1f32;
+      font-style: italic;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+<div class="contenedor">
+
+  <div class="catem">
+    CATEM
+  </div>
+
+  <div class="xv">
+    — XV AÑOS —
+  </div>
+
+  <div class="titulo">
+    🥤 MÓDULO DE BEBIDAS
+  </div>
+
+  <div
+    class="modulo-actual"
+    id="moduloActual">
+  </div>
+
+
+  <button
+    class="boton-escanear"
+    onclick="iniciarScanner()">
+
+    📷 ESCANEAR QR
+
+  </button>
+
+
+  <div id="reader"></div>
+
+
+  <div class="manual">
+
+    <input
+      id="qrManual"
+      placeholder="CATEM-00001">
+
+    <button
+      class="boton-manual"
+      onclick="validarManual()">
+
+      VALIDAR MANUALMENTE
+
+    </button>
+
+  </div>
+
+
+  <div id="resultado"></div>
+
+
+  <div class="footer">
+    Juntos hacemos más
+  </div>
+
+</div>
+
+
+<script>
+
+
+// ======================================================
+// CONFIGURACIÓN
+// ======================================================
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
+
+
+// ======================================================
+// LEER MÓDULO DESDE LA URL
+//
+// Ejemplo:
+// bebidas.html?modulo=1
+// ======================================================
+
+const parametros =
+  new URLSearchParams(
+    window.location.search
+  );
+
+let MODULO =
+  Number(
+    parametros.get("modulo")
+  );
+
+
+// Si no se especifica módulo,
+// usamos módulo 1 para la prueba.
+
+if (
+  !MODULO ||
+  MODULO < 1 ||
+  MODULO > 5
+) {
+
+  MODULO = 1;
+}
+
+
+const COLORES = {
+
+  1: "ROJO",
+  2: "AZUL",
+  3: "VERDE",
+  4: "AMARILLO",
+  5: "MORADO"
+
+};
+
+
+document
+  .getElementById("moduloActual")
+  .innerHTML =
+  "MÓDULO " +
+  MODULO +
+  " — " +
+  COLORES[MODULO];
+
+
+
+let scanner = null;
+
+let procesando = false;
+
+let qrActual = "";
+
+
+// ======================================================
+// INICIAR SCANNER
+// ======================================================
+
+async function iniciarScanner() {
+
+
+  procesando = false;
+
+  qrActual = "";
+
+
+  document
+    .getElementById("resultado")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("reader")
+    .style.display =
+    "block";
+
+
+  try {
+
+
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    await scanner.start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+      },
+
+      async function(texto) {
+
+
+        if (procesando) {
+          return;
+        }
+
+
+        procesando = true;
+
+
+        try {
+
+          await scanner.stop();
+
+        } catch (e) {}
+
+
+        document
+          .getElementById("reader")
+          .style.display =
+          "none";
+
+
+        consultarQR(
+          texto.trim()
+        );
+
+      },
+
+      function(error) {
+
+        // Ignoramos errores normales
+        // mientras busca el QR.
+
+      }
+
+    );
+
+
+  } catch (error) {
+
+
+    alert(
+      "No se pudo iniciar la cámara. " +
+      "Verifica el permiso de cámara."
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// VALIDACIÓN MANUAL
+// ======================================================
+
+function validarManual() {
+
+
+  const qr =
+    document
+      .getElementById(
+        "qrManual"
+      )
+      .value
+      .trim();
+
+
+  if (!qr) {
+
+    alert(
+      "Escribe un código QR."
+    );
+
+    return;
+  }
+
+
+  consultarQR(qr);
+
+}
+
+
+// ======================================================
+// CONSULTAR BEBIDAS
+// ======================================================
+
+async function consultarQR(qr) {
+
+
+  qrActual = qr;
+
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  resultado.style.display =
+    "block";
+
+
+  resultado.className = "";
+
+
+  resultado.innerHTML =
+
+    "<div class='estado'>" +
+    "VALIDANDO..." +
+    "</div>";
+
+
+  try {
+
+
+    const respuesta =
+      await fetch(
+
+        API_URL,
+
+        {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            accion:
+              "consultarBebidas",
+
+            qr:
+              qr,
+
+            modulo:
+              MODULO
+
+          })
+
+        }
+
+      );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    mostrarConsulta(
+      datos
+    );
+
+
+  } catch (error) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+      "<div class='estado'>" +
+      "⚠️ ERROR DE CONEXIÓN" +
+      "</div>" +
+
+      botonSiguiente();
+
+  }
+
+}
+
+
+// ======================================================
+// MOSTRAR CONSULTA
+// ======================================================
+
+function mostrarConsulta(datos) {
+
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  // ==============================================
+  // RECHAZADO
+  // ==============================================
+
+  if (!datos.autorizado) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    let adicional = "";
+
+
+    if (
+      datos.mensaje ==
+      "MÓDULO INCORRECTO"
+    ) {
+
+
+      adicional =
+
+        "<div class='aviso-modulo'>" +
+
+        "PULSERA " +
+        datos.colorPulsera +
+
+        "<br><br>" +
+
+        "DIRÍGETE AL MÓDULO " +
+        datos.moduloBebida +
+
+        "</div>";
+
+    }
+
+
+    resultado.innerHTML =
+
+
+      "<div class='estado'>" +
+
+      "⛔ " +
+      datos.mensaje +
+
+      "</div>" +
+
+
+      (
+        datos.nombre
+
+        ?
+
+        "<div class='nombre'>" +
+        datos.nombre +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      (
+        datos.empresa
+
+        ?
+
+        "<div class='empresa'>" +
+        datos.empresa +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      adicional +
+
+
+      botonSiguiente();
+
+
+    return;
+
+  }
+
+
+  // ==============================================
+  // AUTORIZADO
+  // ==============================================
+
+
+  resultado.className =
+    "correcto";
+
+
+  const disponibles =
+    Number(
+      datos.bebidasDisponibles
+    );
+
+
+  const estilo =
+    obtenerEstiloColor(
+      datos.colorPulsera
+    );
+
+
+  let botones = "";
+
+
+  for (
+    let i = 1;
+    i <= disponibles;
+    i++
+  ) {
+
+
+    botones +=
+
+      "<button " +
+
+      "class='boton-cantidad' " +
+
+      "onclick='entregarBebidas(" +
+      i +
+      ")'>" +
+
+      i +
+
+      "</button>";
+
+  }
+
+
+  resultado.innerHTML =
+
+
+    "<div class='estado'>" +
+    "✅ QR VÁLIDO" +
+    "</div>" +
+
+
+    "<div class='nombre'>" +
+    datos.nombre +
+    "</div>" +
+
+
+    "<div class='empresa'>" +
+    datos.empresa +
+    "</div>" +
+
+
+    "<div class='pulsera' " +
+    "style='" +
+    estilo +
+    "'>" +
+
+    "PULSERA " +
+    datos.colorPulsera +
+
+    "</div>" +
+
+
+    "<div class='disponibles'>" +
+    "BEBIDAS DISPONIBLES" +
+    "</div>" +
+
+
+    "<div class='numero-disponibles'>" +
+    disponibles +
+    "</div>" +
+
+
+    "<div class='pregunta'>" +
+    "¿Cuántas bebidas se entregan?" +
+    "</div>" +
+
+
+    "<div class='botones-cantidad'>" +
+    botones +
+    "</div>";
+
+}
+
+
+// ======================================================
+// ENTREGAR BEBIDAS
+// ======================================================
+
+async function entregarBebidas(
+  cantidad
+) {
+
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  // Evitar doble toque
+
+  const botones =
+    document.querySelectorAll(
+      ".boton-cantidad"
+    );
+
+
+  botones.forEach(
+    boton =>
+      boton.disabled = true
+  );
+
+
+  resultado.insertAdjacentHTML(
+
+    "beforeend",
+
+    "<div id='procesandoEntrega' " +
+    "style='margin-top:20px;font-weight:bold;'>" +
+
+    "REGISTRANDO ENTREGA..." +
+
+    "</div>"
+
+  );
+
+
+  try {
+
+
+    const respuesta =
+      await fetch(
+
+        API_URL,
+
+        {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            accion:
+              "registrarBebidas",
+
+            qr:
+              qrActual,
+
+            modulo:
+              MODULO,
+
+            cantidad:
+              cantidad
+
+          })
+
+        }
+
+      );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    mostrarEntrega(
+      datos
+    );
+
+
+  } catch (error) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+      "<div class='estado'>" +
+      "⚠️ ERROR DE CONEXIÓN" +
+      "</div>" +
+
+      "<div>" +
+      "No se registró la entrega." +
+      "</div>" +
+
+      botonSiguiente();
+
+  }
+
+}
+
+
+// ======================================================
+// RESULTADO DE ENTREGA
+// ======================================================
+
+function mostrarEntrega(datos) {
+
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  if (datos.autorizado) {
+
+
+    resultado.className =
+      "correcto";
+
+
+    resultado.innerHTML =
+
+
+      "<div class='estado'>" +
+      "✅ ENTREGA REGISTRADA" +
+      "</div>" +
+
+
+      "<div class='nombre'>" +
+
+      datos.cantidadEntregada +
+
+      (
+        datos.cantidadEntregada == 1
+
+        ? " BEBIDA ENTREGADA"
+
+        : " BEBIDAS ENTREGADAS"
+      ) +
+
+      "</div>" +
+
+
+      "<div class='disponibles'>" +
+      "BEBIDAS RESTANTES" +
+      "</div>" +
+
+
+      "<div class='numero-disponibles'>" +
+      datos.bebidasDisponibles +
+      "</div>" +
+
+
+      botonSiguiente();
+
+
+  } else {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+
+      "<div class='estado'>" +
+
+      "⛔ " +
+      datos.mensaje +
+
+      "</div>" +
+
+
+      (
+        datos.bebidasDisponibles !==
+        undefined
+
+        ?
+
+        "<div class='disponibles'>" +
+
+        "DISPONIBLES: " +
+        datos.bebidasDisponibles +
+
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      botonSiguiente();
+
+  }
+
+}
+
+
+// ======================================================
+// SIGUIENTE PERSONA
+// ======================================================
+
+function botonSiguiente() {
+
+
+  return (
+
+    "<button " +
+
+    "class='siguiente' " +
+
+    "onclick='siguientePersona()'>" +
+
+    "SIGUIENTE PERSONA →" +
+
+    "</button>"
+
+  );
+
+}
+
+
+function siguientePersona() {
+
+
+  document
+    .getElementById(
+      "resultado"
+    )
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "qrManual"
+    )
+    .value =
+    "";
+
+
+  qrActual = "";
+
+
+  iniciarScanner();
+
+}
+
+
+// ======================================================
+// COLOR DE PULSERA
+// ======================================================
+
+function obtenerEstiloColor(
+  color
+) {
+
+
+  switch (color) {
+
+
+    case "ROJO":
+
+      return (
+        "background:#d32f2f;" +
+        "color:white;"
+      );
+
+
+    case "AZUL":
+
+      return (
+        "background:#1976d2;" +
+        "color:white;"
+      );
+
+
+    case "VERDE":
+
+      return (
+        "background:#388e3c;" +
+        "color:white;"
+      );
+
+
+    case "AMARILLO":
+
+      return (
+        "background:#fbc02d;" +
+        "color:#222;"
+      );
+
+
+    case "MORADO":
+
+      return (
+        "background:#7b1fa2;" +
+        "color:white;"
+      );
+
+
+    default:
+
+      return (
+        "background:#eee;" +
+        "color:#222;"
+      );
+
+  }
+
+}
+
+
+</script>
+
+</body>
+</html>
