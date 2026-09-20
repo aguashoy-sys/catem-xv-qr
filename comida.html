@@ -2,21 +2,13 @@
 <html lang="es">
 
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>CATEM XV AÑOS - Comida</title>
 
-  <title>
-    CATEM XV AÑOS - Comidas
-  </title>
-
-  <script
-    src="https://unpkg.com/html5-qrcode"
-  ></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
 
@@ -27,171 +19,187 @@
     body {
       margin: 0;
       padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f3f3f3;
-      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
       color: #222;
+      text-align: center;
     }
 
     .contenedor {
-      max-width: 520px;
+      max-width: 500px;
       margin: auto;
     }
 
-    .encabezado {
-      background: #111;
-      color: white;
-      padding: 22px 15px;
-      border-radius: 16px;
-      margin-bottom: 18px;
-    }
-
     .catem {
-      font-size: 32px;
-      font-weight: bold;
+      font-size: 42px;
+      font-weight: 900;
       letter-spacing: 2px;
+      margin-top: 10px;
     }
 
-    .aniversario {
-      margin-top: 4px;
+    .xv {
+      color: #7b1f32;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .titulo {
+      margin-top: 22px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .modulo-actual {
+      margin-top: 8px;
+      font-size: 30px;
+      font-weight: 900;
+      color: #7b1f32;
+    }
+
+    .boton-escanear {
+      width: 100%;
+      padding: 18px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: #7b1f32;
+      color: white;
       font-size: 20px;
       font-weight: bold;
-    }
-
-    .tipo-modulo {
-      margin-top: 12px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
-
-    #numeroModulo {
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 5px;
-    }
-
-    .tarjeta {
-      background: white;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 18px;
-      box-shadow:
-        0 3px 12px
-        rgba(0,0,0,0.10);
+      cursor: pointer;
     }
 
     #reader {
       width: 100%;
-      overflow: hidden;
+      margin-top: 20px;
       border-radius: 12px;
+      overflow: hidden;
+      display: none;
     }
 
     .manual {
-      margin-top: 18px;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
     }
 
     input {
       width: 100%;
       padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #bbb;
+      border: 1px solid #ccc;
+      border-radius: 8px;
       font-size: 18px;
-      text-transform: uppercase;
       text-align: center;
+      text-transform: uppercase;
     }
 
-    button {
+    .boton-manual {
       width: 100%;
-      padding: 16px;
+      padding: 15px;
       margin-top: 10px;
       border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #resultado {
+      display: none;
+      margin-top: 25px;
+      padding: 25px 15px;
+      border-radius: 15px;
+    }
+
+    .correcto {
+      background: #e9f7ef;
+      border: 3px solid #28a745;
+    }
+
+    .rechazado {
+      background: #fdecec;
+      border: 3px solid #dc3545;
+    }
+
+    .estado {
+      font-size: 27px;
+      font-weight: 900;
+    }
+
+    .nombre {
+      font-size: 24px;
+      font-weight: 900;
+      margin-top: 18px;
+    }
+
+    .empresa {
+      font-size: 18px;
+      margin-top: 5px;
+    }
+
+    .disponibles {
+      margin-top: 25px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .numero-disponibles {
+      font-size: 52px;
+      font-weight: 900;
+      margin-top: 5px;
+    }
+
+    .pregunta {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .botones-cantidad {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .boton-cantidad {
+      padding: 20px 5px;
+      border: none;
+      border-radius: 12px;
+      background: #7b1f32;
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .boton-cantidad:disabled {
+      opacity: .5;
+    }
+
+    .siguiente {
+      width: 100%;
+      margin-top: 25px;
+      padding: 17px;
+      border: none;
       border-radius: 10px;
+      background: #222;
+      color: white;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .boton-consultar {
-      background: #222;
-      color: white;
-    }
-
-    .boton-entrega {
-      background: #222;
-      color: white;
-      font-size: 20px;
-      padding: 18px;
-    }
-
-    .boton-nuevo {
-      background: #e5e5e5;
-      color: #222;
-    }
-
-    #resultado {
-      display: none;
-    }
-
-    .nombre {
-      font-size: 24px;
+    .footer {
+      margin-top: 30px;
+      color: #7b1f32;
+      font-style: italic;
       font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .empresa {
-      font-size: 17px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    .saldo {
-      font-size: 56px;
-      font-weight: bold;
-      line-height: 1;
-      margin: 12px 0;
-    }
-
-    .texto-saldo {
-      font-size: 18px;
-      margin-bottom: 18px;
-    }
-
-    .exito {
-      border: 3px solid #198754;
-    }
-
-    .error {
-      border: 3px solid #dc3545;
-    }
-
-    .mensaje-exito {
-      font-size: 25px;
-      font-weight: bold;
-      color: #198754;
-      margin-bottom: 15px;
-    }
-
-    .mensaje-error {
-      font-size: 24px;
-      font-weight: bold;
-      color: #dc3545;
-      margin-bottom: 15px;
-    }
-
-    .cargando {
-      font-size: 18px;
-      font-weight: bold;
-      padding: 20px;
-    }
-
-    .nota {
-      font-size: 14px;
-      color: #777;
-      margin-top: 12px;
     }
 
   </style>
-
 </head>
 
 
@@ -199,72 +207,59 @@
 
 <div class="contenedor">
 
-
-  <!-- ENCABEZADO -->
-
-  <div class="encabezado">
-
-    <div class="catem">
-      CATEM
-    </div>
-
-    <div class="aniversario">
-      XV AÑOS
-    </div>
-
-    <div class="tipo-modulo">
-      MÓDULO DE COMIDA
-    </div>
-
-    <div id="numeroModulo">
-      MÓDULO -
-    </div>
-
+  <div class="catem">
+    CATEM
   </div>
 
+  <div class="xv">
+    — XV AÑOS —
+  </div>
 
-  <!-- ESCÁNER -->
+  <div class="titulo">
+    🍽️ MÓDULO DE COMIDA
+  </div>
 
   <div
-    class="tarjeta"
-    id="zonaScanner"
-  >
-
-    <div id="reader"></div>
+    class="modulo-actual"
+    id="moduloActual">
+  </div>
 
 
-    <div class="manual">
+  <button
+    class="boton-escanear"
+    onclick="iniciarScanner()">
 
-      <input
-        type="text"
-        id="qrManual"
-        placeholder="CATEM-00001"
-      >
+    📷 ESCANEAR QR
 
-      <button
-        class="boton-consultar"
-        onclick="consultarManual()"
-      >
-        CONSULTAR QR
-      </button>
+  </button>
 
-    </div>
 
-    <div class="nota">
-      Escanear el QR no descuenta comidas.
-    </div>
+  <div id="reader"></div>
+
+
+  <div class="manual">
+
+    <input
+      id="qrManual"
+      placeholder="CATEM-00001">
+
+    <button
+      class="boton-manual"
+      onclick="validarManual()">
+
+      VALIDAR MANUALMENTE
+
+    </button>
 
   </div>
 
 
-  <!-- RESULTADO -->
+  <div id="resultado"></div>
 
-  <div
-    class="tarjeta"
-    id="resultado"
-  >
+
+  <div class="footer">
+    Juntos hacemos más
   </div>
-
 
 </div>
 
@@ -276,32 +271,14 @@
 // CONFIGURACIÓN
 // ======================================================
 
-
-// IMPORTANTE:
-//
-// Copia aquí EXACTAMENTE el mismo API_URL
-// que tienes actualmente en bebidas.html.
-//
-// Ejemplo de estructura:
-//
-// const API_URL =
-// "https://script.google.com/macros/s/XXXXXXXX/exec";
-//
-// NO uses el ejemplo.
-// Pega tu URL real.
-
-
 const API_URL =
-"https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
-
+  "https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
 
 
 // ======================================================
-// OBTENER MÓDULO DESDE LA URL
+// LEER MÓDULO DESDE LA URL
 //
 // comida.html?modulo=1
-// comida.html?modulo=2
-// etc.
 // ======================================================
 
 const parametros =
@@ -309,15 +286,13 @@ const parametros =
     window.location.search
   );
 
-
 let MODULO =
   Number(
     parametros.get("modulo")
   );
 
-
 if (
-  !Number.isInteger(MODULO) ||
+  !MODULO ||
   MODULO < 1 ||
   MODULO > 5
 ) {
@@ -328,262 +303,161 @@ if (
 
 
 document
-  .getElementById(
-    "numeroModulo"
-  )
-  .textContent =
-    "MÓDULO " + MODULO;
+  .getElementById("moduloActual")
+  .innerHTML =
+  "MÓDULO " +
+  MODULO;
 
 
-
-// ======================================================
-// VARIABLES
-// ======================================================
-
-let qrActual = "";
+let scanner = null;
 
 let procesando = false;
 
-let ultimoQR = "";
-
-let ultimoEscaneo = 0;
-
+let qrActual = "";
 
 
 // ======================================================
-// ESCÁNER
+// INICIAR SCANNER
 // ======================================================
 
-const lector =
-  new Html5QrcodeScanner(
+async function iniciarScanner() {
 
-    "reader",
 
-    {
-      fps: 10,
+  procesando = false;
 
-      qrbox: {
-        width: 250,
-        height: 250
+  qrActual = "";
+
+
+  document
+    .getElementById("resultado")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("reader")
+    .style.display =
+    "block";
+
+
+  try {
+
+
+    scanner =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    await scanner.start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+      },
+
+      async function(texto) {
+
+
+        if (procesando) {
+          return;
+        }
+
+
+        procesando = true;
+
+
+        try {
+
+          await scanner.stop();
+
+        } catch (e) {}
+
+
+        document
+          .getElementById("reader")
+          .style.display =
+          "none";
+
+
+        consultarQR(
+          texto.trim()
+        );
+
+      },
+
+      function(error) {
+
+        // Ignoramos errores normales
+        // mientras busca el QR.
+
       }
-    },
 
-    false
-
-  );
-
-
-lector.render(
-
-  qrLeido,
-
-  errorLectura
-
-);
-
-
-
-// ======================================================
-// QR LEÍDO
-// ======================================================
-
-function qrLeido(
-  texto
-) {
-
-  const qr =
-    String(texto)
-      .trim()
-      .toUpperCase();
-
-
-  const ahora =
-    Date.now();
-
-
-  // Evita múltiples consultas
-  // inmediatas del mismo QR.
-
-  if (
-    qr === ultimoQR &&
-    ahora - ultimoEscaneo < 3000
-  ) {
-
-    return;
-
-  }
-
-
-  if (procesando) {
-    return;
-  }
-
-
-  ultimoQR =
-    qr;
-
-  ultimoEscaneo =
-    ahora;
-
-
-  consultarQR(qr);
-
-}
-
-
-
-// ======================================================
-// ERROR NORMAL DE LECTURA
-// ======================================================
-
-function errorLectura(
-  error
-) {
-
-  // No mostramos nada.
-  // La cámara intenta leer
-  // continuamente.
-
-}
-
-
-
-// ======================================================
-// CONSULTA MANUAL
-// ======================================================
-
-function consultarManual() {
-
-  const input =
-    document.getElementById(
-      "qrManual"
     );
 
 
+  } catch (error) {
+
+
+    alert(
+      "No se pudo iniciar la cámara. " +
+      "Verifica el permiso de cámara."
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// VALIDACIÓN MANUAL
+// ======================================================
+
+function validarManual() {
+
+
   const qr =
-    input.value
-      .trim()
-      .toUpperCase();
+    document
+      .getElementById(
+        "qrManual"
+      )
+      .value
+      .trim();
 
 
   if (!qr) {
 
-    mostrarError(
-      "INGRESA UN QR"
+    alert(
+      "Escribe un código QR."
     );
 
     return;
-
   }
 
 
   consultarQR(qr);
 
 }
-
 
 
 // ======================================================
 // CONSULTAR COMIDAS
 // ======================================================
 
-async function consultarQR(
-  qr
-) {
-
-  if (procesando) {
-    return;
-  }
+async function consultarQR(qr) {
 
 
-  procesando =
-    true;
+  qrActual = qr;
 
-
-  qrActual =
-    qr;
-
-
-  mostrarCargando(
-    "CONSULTANDO..."
-  );
-
-
-  try {
-
-    const respuesta =
-      await fetch(
-        API_URL,
-        {
-
-          method: "POST",
-
-          body:
-            JSON.stringify({
-
-              accion:
-                "consultarComidas",
-
-              qr:
-                qr,
-
-              modulo:
-                MODULO
-
-            })
-
-        }
-      );
-
-
-    const datos =
-      await respuesta.json();
-
-
-    if (
-      !datos.autorizado
-    ) {
-
-      mostrarError(
-        datos.mensaje ||
-        "OPERACIÓN NO AUTORIZADA",
-        datos
-      );
-
-      return;
-
-    }
-
-
-    mostrarComidas(
-      datos
-    );
-
-
-  } catch (error) {
-
-    mostrarError(
-      "ERROR DE CONEXIÓN"
-    );
-
-  } finally {
-
-    procesando =
-      false;
-
-  }
-
-}
-
-
-
-// ======================================================
-// MOSTRAR COMIDAS DISPONIBLES
-// ======================================================
-
-function mostrarComidas(
-  datos
-) {
 
   const resultado =
     document.getElementById(
@@ -591,12 +465,179 @@ function mostrarComidas(
     );
 
 
-  resultado.className =
-    "tarjeta exito";
-
-
   resultado.style.display =
     "block";
+
+
+  resultado.className = "";
+
+
+  resultado.innerHTML =
+
+    "<div class='estado'>" +
+    "VALIDANDO..." +
+    "</div>";
+
+
+  try {
+
+
+    const respuesta =
+      await fetch(
+
+        API_URL,
+
+        {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            accion:
+              "consultarComidas",
+
+            qr:
+              qr,
+
+            modulo:
+              MODULO
+
+          })
+
+        }
+
+      );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    mostrarConsulta(
+      datos
+    );
+
+
+  } catch (error) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+      "<div class='estado'>" +
+      "⚠️ ERROR DE CONEXIÓN" +
+      "</div>" +
+
+      botonSiguiente();
+
+  }
+
+}
+
+
+// ======================================================
+// MOSTRAR CONSULTA
+// ======================================================
+
+function mostrarConsulta(datos) {
+
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  // ==============================================
+  // RECHAZADO
+  // ==============================================
+
+  if (!datos.autorizado) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+
+      "<div class='estado'>" +
+
+      "⛔ " +
+      datos.mensaje +
+
+      "</div>" +
+
+
+      (
+        datos.nombre
+
+        ?
+
+        "<div class='nombre'>" +
+        datos.nombre +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      (
+        datos.empresa
+
+        ?
+
+        "<div class='empresa'>" +
+        datos.empresa +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      (
+        datos.comidasDisponibles !==
+        undefined
+
+        ?
+
+        "<div class='disponibles'>" +
+        "COMIDAS DISPONIBLES" +
+        "</div>" +
+
+        "<div class='numero-disponibles'>" +
+        datos.comidasDisponibles +
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      botonSiguiente();
+
+
+    return;
+
+  }
+
+
+  // ==============================================
+  // AUTORIZADO
+  // ==============================================
+
+
+  resultado.className =
+    "correcto";
 
 
   const disponibles =
@@ -608,81 +649,68 @@ function mostrarComidas(
   let botones = "";
 
 
-  if (
-    disponibles >= 1
+  for (
+    let i = 1;
+    i <= disponibles;
+    i++
   ) {
 
-    botones += `
 
-      <button
-        class="boton-entrega"
-        onclick="entregarComidas(1)"
-      >
-        ENTREGAR 1 COMIDA
-      </button>
+    botones +=
 
-    `;
+      "<button " +
+
+      "class='boton-cantidad' " +
+
+      "onclick='entregarComidas(" +
+      i +
+      ")'>" +
+
+      i +
+
+      "</button>";
 
   }
 
 
-  if (
-    disponibles >= 2
-  ) {
-
-    botones += `
-
-      <button
-        class="boton-entrega"
-        onclick="entregarComidas(2)"
-      >
-        ENTREGAR 2 COMIDAS
-      </button>
-
-    `;
-
-  }
+  resultado.innerHTML =
 
 
-  resultado.innerHTML = `
+    "<div class='estado'>" +
+    "✅ QR VÁLIDO" +
+    "</div>" +
 
-    <div class="mensaje-exito">
-      QR AUTORIZADO
-    </div>
 
-    <div class="nombre">
-      ${escaparHTML(
-        datos.nombre
-      )}
-    </div>
+    "<div class='nombre'>" +
+    datos.nombre +
+    "</div>" +
 
-    <div class="empresa">
-      ${escaparHTML(
-        datos.empresa
-      )}
-    </div>
 
-    <div class="saldo">
-      ${disponibles}
-    </div>
+    "<div class='empresa'>" +
+    datos.empresa +
+    "</div>" +
 
-    <div class="texto-saldo">
-      COMIDAS DISPONIBLES
-    </div>
 
-    ${botones}
+    "<div class='disponibles'>" +
+    "COMIDAS DISPONIBLES" +
+    "</div>" +
 
-    <button
-      class="boton-nuevo"
-      onclick="nuevoQR()"
-    >
-      ESCANEAR OTRO QR
-    </button>
 
-  `;
+    "<div class='numero-disponibles'>" +
+    disponibles +
+    "</div>" +
+
+
+    "<div class='pregunta'>" +
+    "¿Cuántas comidas se entregan?" +
+    "</div>" +
+
+
+    "<div class='botones-cantidad'>" +
+    botones +
+    "</div>";
 
 }
-
 
 
 // ======================================================
@@ -693,78 +721,76 @@ async function entregarComidas(
   cantidad
 ) {
 
-  if (procesando) {
-    return;
-  }
 
-
-  if (!qrActual) {
-
-    mostrarError(
-      "NO HAY QR SELECCIONADO"
+  const resultado =
+    document.getElementById(
+      "resultado"
     );
 
-    return;
 
-  }
+  // Evitar doble toque
+
+  const botones =
+    document.querySelectorAll(
+      ".boton-cantidad"
+    );
 
 
-  procesando =
-    true;
+  botones.forEach(
+    boton =>
+      boton.disabled = true
+  );
 
 
-  mostrarCargando(
-    "REGISTRANDO ENTREGA..."
+  resultado.insertAdjacentHTML(
+
+    "beforeend",
+
+    "<div id='procesandoEntrega' " +
+    "style='margin-top:20px;font-weight:bold;'>" +
+
+    "REGISTRANDO ENTREGA..." +
+
+    "</div>"
+
   );
 
 
   try {
 
+
     const respuesta =
       await fetch(
+
         API_URL,
+
         {
 
           method: "POST",
 
-          body:
-            JSON.stringify({
+          body: JSON.stringify({
 
-              accion:
-                "registrarComidas",
+            accion:
+              "registrarComidas",
 
-              qr:
-                qrActual,
+            qr:
+              qrActual,
 
-              modulo:
-                MODULO,
+            modulo:
+              MODULO,
 
-              cantidad:
-                cantidad
+            cantidad:
+              cantidad
 
-            })
+          })
 
         }
+
       );
 
 
     const datos =
       await respuesta.json();
-
-
-    if (
-      !datos.autorizado
-    ) {
-
-      mostrarError(
-        datos.mensaje ||
-        "ENTREGA NO AUTORIZADA",
-        datos
-      );
-
-      return;
-
-    }
 
 
     mostrarEntrega(
@@ -774,28 +800,34 @@ async function entregarComidas(
 
   } catch (error) {
 
-    mostrarError(
-      "ERROR DE CONEXIÓN"
-    );
 
-  } finally {
+    resultado.className =
+      "rechazado";
 
-    procesando =
-      false;
+
+    resultado.innerHTML =
+
+      "<div class='estado'>" +
+      "⚠️ ERROR DE CONEXIÓN" +
+      "</div>" +
+
+      "<div>" +
+      "No se registró la entrega." +
+      "</div>" +
+
+      botonSiguiente();
 
   }
 
 }
 
 
-
 // ======================================================
-// ENTREGA EXITOSA
+// RESULTADO DE ENTREGA
 // ======================================================
 
-function mostrarEntrega(
-  datos
-) {
+function mostrarEntrega(datos) {
+
 
   const resultado =
     document.getElementById(
@@ -803,264 +835,118 @@ function mostrarEntrega(
     );
 
 
-  resultado.className =
-    "tarjeta exito";
+  if (datos.autorizado) {
 
 
-  resultado.style.display =
-    "block";
+    resultado.className =
+      "correcto";
 
 
-  const cantidad =
-    Number(
-      datos.cantidadEntregada
-    );
+    resultado.innerHTML =
 
 
-  const restantes =
-    Number(
-      datos.comidasDisponibles
-    );
+      "<div class='estado'>" +
+      "✅ ENTREGA REGISTRADA" +
+      "</div>" +
 
 
-  const palabra =
-    cantidad === 1
-      ? "COMIDA ENTREGADA"
-      : "COMIDAS ENTREGADAS";
+      "<div class='nombre'>" +
+
+      datos.cantidadEntregada +
+
+      (
+        datos.cantidadEntregada == 1
+
+        ? " COMIDA ENTREGADA"
+
+        : " COMIDAS ENTREGADAS"
+      ) +
+
+      "</div>" +
 
 
-  resultado.innerHTML = `
-
-    <div class="mensaje-exito">
-      ✓ ${palabra}
-    </div>
-
-    <div class="nombre">
-      ${escaparHTML(
-        datos.nombre
-      )}
-    </div>
-
-    <div class="empresa">
-      ${escaparHTML(
-        datos.empresa
-      )}
-    </div>
-
-    <div>
-      Se entregaron:
-    </div>
-
-    <div class="saldo">
-      ${cantidad}
-    </div>
-
-    <div class="texto-saldo">
-      ${
-        cantidad === 1
-        ? "COMIDA"
-        : "COMIDAS"
-      }
-    </div>
-
-    <hr>
-
-    <div>
-      RESTANTES
-    </div>
-
-    <div
-      class="saldo"
-      style="font-size:40px;"
-    >
-      ${restantes}
-    </div>
-
-    <button
-      class="boton-nuevo"
-      onclick="nuevoQR()"
-    >
-      ESCANEAR SIGUIENTE QR
-    </button>
-
-  `;
+      "<div class='disponibles'>" +
+      "COMIDAS RESTANTES" +
+      "</div>" +
 
 
-  // Evita que la cámara vuelva
-  // a detectar inmediatamente
-  // el mismo código.
+      "<div class='numero-disponibles'>" +
+      datos.comidasDisponibles +
+      "</div>" +
 
-  ultimoQR =
-    qrActual;
 
-  ultimoEscaneo =
-    Date.now();
+      botonSiguiente();
+
+
+  } else {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+
+      "<div class='estado'>" +
+
+      "⛔ " +
+      datos.mensaje +
+
+      "</div>" +
+
+
+      (
+        datos.comidasDisponibles !==
+        undefined
+
+        ?
+
+        "<div class='disponibles'>" +
+
+        "DISPONIBLES: " +
+        datos.comidasDisponibles +
+
+        "</div>"
+
+        :
+
+        ""
+      ) +
+
+
+      botonSiguiente();
+
+  }
 
 }
 
 
-
 // ======================================================
-// MOSTRAR ERROR
+// SIGUIENTE PERSONA
 // ======================================================
 
-function mostrarError(
-  mensaje,
-  datos = {}
-) {
-
-  const resultado =
-    document.getElementById(
-      "resultado"
-    );
+function botonSiguiente() {
 
 
-  resultado.className =
-    "tarjeta error";
+  return (
 
+    "<button " +
 
-  resultado.style.display =
-    "block";
+    "class='siguiente' " +
 
+    "onclick='siguientePersona()'>" +
 
-  let informacion = "";
+    "SIGUIENTE PERSONA →" +
 
+    "</button>"
 
-  if (datos.nombre) {
-
-    informacion += `
-
-      <div class="nombre">
-        ${escaparHTML(
-          datos.nombre
-        )}
-      </div>
-
-    `;
-
-  }
-
-
-  if (datos.empresa) {
-
-    informacion += `
-
-      <div class="empresa">
-        ${escaparHTML(
-          datos.empresa
-        )}
-      </div>
-
-    `;
-
-  }
-
-
-  if (
-    datos.comidasDisponibles !==
-    undefined
-  ) {
-
-    informacion += `
-
-      <div>
-        COMIDAS DISPONIBLES
-      </div>
-
-      <div class="saldo">
-        ${
-          Number(
-            datos.comidasDisponibles
-          )
-        }
-      </div>
-
-    `;
-
-  }
-
-
-  resultado.innerHTML = `
-
-    <div class="mensaje-error">
-      ${escaparHTML(
-        mensaje
-      )}
-    </div>
-
-    ${informacion}
-
-    <button
-      class="boton-nuevo"
-      onclick="nuevoQR()"
-    >
-      ESCANEAR OTRO QR
-    </button>
-
-  `;
-
-
-  procesando =
-    false;
+  );
 
 }
 
 
-
-// ======================================================
-// CARGANDO
-// ======================================================
-
-function mostrarCargando(
-  texto
-) {
-
-  const resultado =
-    document.getElementById(
-      "resultado"
-    );
-
-
-  resultado.className =
-    "tarjeta";
-
-
-  resultado.style.display =
-    "block";
-
-
-  resultado.innerHTML = `
-
-    <div class="cargando">
-      ${escaparHTML(texto)}
-    </div>
-
-  `;
-
-}
-
-
-
-// ======================================================
-// NUEVO QR
-// ======================================================
-
-function nuevoQR() {
-
-  qrActual =
-    "";
-
-
-  procesando =
-    false;
-
-
-  document
-    .getElementById(
-      "qrManual"
-    )
-    .value =
-      "";
+function siguientePersona() {
 
 
   document
@@ -1068,50 +954,21 @@ function nuevoQR() {
       "resultado"
     )
     .style.display =
-      "none";
+    "none";
 
 
   document
     .getElementById(
       "qrManual"
     )
-    .focus();
-
-}
-
+    .value =
+    "";
 
 
-// ======================================================
-// SEGURIDAD BÁSICA DE TEXTO
-// ======================================================
+  qrActual = "";
 
-function escaparHTML(
-  texto
-) {
 
-  return String(
-    texto || ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+  iniciarScanner();
 
 }
 
@@ -1119,5 +976,4 @@ function escaparHTML(
 </script>
 
 </body>
-
 </html>
