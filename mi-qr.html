@@ -151,6 +151,7 @@
     #empresaResultado {
       color: #666;
       margin-top: 5px;
+      font-size: 16px;
     }
 
     #qrcode {
@@ -261,14 +262,14 @@
       <button
         id="btnDescargar"
         type="button"
-        onclick="descargarQR()"
+        onclick="descargarPase()"
       >
-        ⬇ DESCARGAR MI QR
+        ⬇ DESCARGAR MI PASE
       </button>
 
       <div class="instruccion">
         Presenta este código QR en la recepción del evento.
-        Te recomendamos descargarlo y guardar también una captura de pantalla.
+        Te recomendamos descargar tu pase y guardar también una captura de pantalla.
       </div>
 
       <div id="codigo" class="codigo"></div>
@@ -319,8 +320,7 @@
         resultado.style.display = "none";
 
         mensaje.className = "cargando";
-        mensaje.textContent =
-          "Buscando tu acceso...";
+        mensaje.textContent = "Buscando tu acceso...";
 
         boton.disabled = true;
 
@@ -388,7 +388,6 @@
 
           const empleado = data[0];
 
-
           mensaje.style.display = "none";
           mensaje.className = "";
 
@@ -421,7 +420,6 @@
 
 
           formulario.style.display = "none";
-
           resultado.style.display = "block";
 
 
@@ -451,31 +449,32 @@
     }
 
 
-    function descargarQR() {
+    function descargarPase() {
 
-      const contenedorQR =
+      const nombre =
+        document.getElementById("nombre")
+        .textContent.trim();
+
+      const empresa =
+        document.getElementById("empresaResultado")
+        .textContent.trim();
+
+      const token =
+        document.getElementById("codigo")
+        .textContent.trim();
+
+
+      const qrContenedor =
         document.getElementById("qrcode");
 
-      const canvas =
-        contenedorQR.querySelector("canvas");
+      const qrCanvas =
+        qrContenedor.querySelector("canvas");
 
-      const imagen =
-        contenedorQR.querySelector("img");
-
-      let urlImagen;
+      const qrImagen =
+        qrContenedor.querySelector("img");
 
 
-      if (canvas) {
-
-        urlImagen =
-          canvas.toDataURL("image/png");
-
-      } else if (imagen) {
-
-        urlImagen =
-          imagen.src;
-
-      } else {
+      if (!qrCanvas && !qrImagen) {
 
         alert("No se encontró el código QR.");
 
@@ -483,29 +482,313 @@
       }
 
 
-      const nombreEmpleado =
-        document.getElementById("nombre")
-        .textContent
-        .trim()
-        .replace(/\s+/g, "_");
+      /*
+        Creamos una imagen vertical de alta resolución.
+        El usuario descargará ESTA imagen completa,
+        no solamente el QR.
+      */
+
+      const canvas =
+        document.createElement("canvas");
+
+      canvas.width = 1080;
+      canvas.height = 1600;
+
+      const ctx =
+        canvas.getContext("2d");
+
+
+      // Fondo blanco
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      // Franja superior CATEM
+      ctx.fillStyle = "#971b2f";
+      ctx.fillRect(
+        0,
+        0,
+        1080,
+        270
+      );
+
+
+      // CATEM
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.font = "bold 100px Arial";
+
+      ctx.fillText(
+        "CATEM",
+        540,
+        125
+      );
+
+
+      // XV AÑOS
+      ctx.font = "bold 46px Arial";
+
+      ctx.fillText(
+        "XV AÑOS",
+        540,
+        195
+      );
+
+
+      // Título
+      ctx.fillStyle = "#971b2f";
+      ctx.font = "bold 42px Arial";
+
+      ctx.fillText(
+        "ACCESO AL EVENTO",
+        540,
+        350
+      );
+
+
+      // Nombre
+      ctx.fillStyle = "#222222";
+      ctx.font = "bold 52px Arial";
+
+      dibujarTextoAjustado(
+        ctx,
+        nombre,
+        540,
+        450,
+        900,
+        52
+      );
+
+
+      // Empresa
+      ctx.fillStyle = "#666666";
+      ctx.font = "38px Arial";
+
+      ctx.fillText(
+        empresa,
+        540,
+        520
+      );
+
+
+      // Línea divisoria
+      ctx.strokeStyle = "#dddddd";
+      ctx.lineWidth = 3;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        120,
+        575
+      );
+
+      ctx.lineTo(
+        960,
+        575
+      );
+
+      ctx.stroke();
+
+
+      // Zona blanca detrás del QR
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillRect(
+        215,
+        625,
+        650,
+        650
+      );
+
+
+      // Dibujamos el QR
+      if (qrCanvas) {
+
+        ctx.drawImage(
+          qrCanvas,
+          260,
+          670,
+          560,
+          560
+        );
+
+        terminarPase(
+          ctx,
+          canvas,
+          nombre,
+          token
+        );
+
+      } else {
+
+        const imagenTemporal =
+          new Image();
+
+        imagenTemporal.onload =
+          function() {
+
+            ctx.drawImage(
+              imagenTemporal,
+              260,
+              670,
+              560,
+              560
+            );
+
+            terminarPase(
+              ctx,
+              canvas,
+              nombre,
+              token
+            );
+
+          };
+
+        imagenTemporal.src =
+          qrImagen.src;
+
+      }
+
+    }
+
+
+    function terminarPase(
+      ctx,
+      canvas,
+      nombre,
+      token
+    ) {
+
+      // Token
+      ctx.fillStyle = "#777777";
+      ctx.textAlign = "center";
+      ctx.font = "28px monospace";
+
+      ctx.fillText(
+        token,
+        540,
+        1320
+      );
+
+
+      // Mensaje
+      ctx.fillStyle = "#222222";
+      ctx.font = "bold 31px Arial";
+
+      ctx.fillText(
+        "Presenta este código QR en recepción",
+        540,
+        1400
+      );
+
+
+      // Pie
+      ctx.fillStyle = "#888888";
+      ctx.font = "25px Arial";
+
+      ctx.fillText(
+        "CATEM Aguascalientes",
+        540,
+        1480
+      );
+
+
+      // Línea inferior
+      ctx.fillStyle = "#971b2f";
+
+      ctx.fillRect(
+        0,
+        1555,
+        1080,
+        45
+      );
+
+
+      // Generar PNG
+      const url =
+        canvas.toDataURL(
+          "image/png",
+          1.0
+        );
+
+
+      const nombreArchivo =
+        nombre
+        .replace(/\s+/g, "_")
+        .replace(
+          /[^a-zA-Z0-9_áéíóúÁÉÍÓÚñÑ-]/g,
+          ""
+        );
 
 
       const enlace =
         document.createElement("a");
 
-      enlace.href = urlImagen;
+      enlace.href = url;
 
       enlace.download =
-        "QR_CATEM_XV_" +
-        nombreEmpleado +
+        "PASE_CATEM_XV_" +
+        nombreArchivo +
         ".png";
 
 
-      document.body.appendChild(enlace);
+      document.body.appendChild(
+        enlace
+      );
 
       enlace.click();
 
-      document.body.removeChild(enlace);
+      document.body.removeChild(
+        enlace
+      );
+
+    }
+
+
+    function dibujarTextoAjustado(
+      ctx,
+      texto,
+      x,
+      y,
+      anchoMaximo,
+      tamanoInicial
+    ) {
+
+      let tamano =
+        tamanoInicial;
+
+      ctx.font =
+        "bold " +
+        tamano +
+        "px Arial";
+
+
+      while (
+        ctx.measureText(texto).width >
+        anchoMaximo &&
+        tamano > 30
+      ) {
+
+        tamano -= 2;
+
+        ctx.font =
+          "bold " +
+          tamano +
+          "px Arial";
+
+      }
+
+
+      ctx.fillText(
+        texto,
+        x,
+        y
+      );
 
     }
 
