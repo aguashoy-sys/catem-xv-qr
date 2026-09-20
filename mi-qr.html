@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Obtén tu acceso | CATEM XV AÑOS</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f2f2f2;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      border-radius: 22px;
+      padding: 30px 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.12);
+    }
+
+    .encabezado {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .catem {
+      font-size: 34px;
+      font-weight: 900;
+      color: #971b2f;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .xv {
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .subtitulo {
+      margin-top: 14px;
+      font-size: 15px;
+      color: #666;
+      line-height: 1.45;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      margin-top: 18px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #971b2f;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #971b2f;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    #mensaje {
+      display: none;
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .error {
+      display: block !important;
+      background: #fdeaea;
+      color: #8a1628;
+    }
+
+    .cargando {
+      display: block !important;
+      background: #f1f1f1;
+      color: #555;
+    }
+
+    #resultado {
+      display: none;
+      text-align: center;
+      margin-top: 25px;
+      border-top: 1px solid #ddd;
+      padding-top: 25px;
+    }
+
+    #resultado h2 {
+      color: #971b2f;
+      margin-bottom: 5px;
+    }
+
+    #nombre {
+      font-size: 21px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    #empresaResultado {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    #qrcode {
+      margin: 24px auto 18px;
+      width: 256px;
+      height: 256px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+      max-width: 100%;
+    }
+
+    .instruccion {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #555;
+      margin-top: 15px;
+    }
+
+    .codigo {
+      margin-top: 12px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #777;
+      word-break: break-all;
+    }
+
+    .pie {
+      margin-top: 28px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contenedor">
+
+    <div class="encabezado">
+      <div class="catem">CATEM</div>
+      <div class="xv">XV AÑOS</div>
+
+      <div class="subtitulo">
+        Consulta tu acceso personal al evento.
+        Ingresa tus datos para obtener tu código QR.
+      </div>
+    </div>
+
+    <form id="formulario">
+
+      <label for="empresa">Empresa</label>
+
+      <select id="empresa" required>
+        <option value="">Selecciona tu empresa</option>
+        <option value="Nissan">Nissan</option>
+        <option value="Jatco">Jatco</option>
+        <option value="Bosch">Bosch</option>
+        <option value="Mazda">Mazda</option>
+      </select>
+
+      <label for="numeroEmpleado">Número de empleado</label>
+
+      <input
+        id="numeroEmpleado"
+        type="text"
+        placeholder="Ej. NIS10001"
+        autocomplete="off"
+        required
+      >
+
+      <label for="ultimos4">Últimos 4 dígitos de tu celular</label>
+
+      <input
+        id="ultimos4"
+        type="tel"
+        inputmode="numeric"
+        maxlength="4"
+        pattern="[0-9]{4}"
+        placeholder="Ej. 2092"
+        autocomplete="off"
+        required
+      >
+
+      <button id="boton" type="submit">
+        OBTENER MI QR
+      </button>
+
+    </form>
+
+    <div id="mensaje"></div>
+
+    <div id="resultado">
+
+      <h2>¡Acceso encontrado!</h2>
+
+      <div id="nombre"></div>
+
+      <div id="empresaResultado"></div>
+
+      <div id="qrcode"></div>
+
+      <div class="instruccion">
+        Presenta este código QR en la recepción del evento.
+        Te recomendamos guardar una captura de pantalla.
+      </div>
+
+      <div id="codigo" class="codigo"></div>
+
+    </div>
+
+    <div class="pie">
+      Centro de Atención CATEM Aguascalientes
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://yawuozkdndxdreepqlaw.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_SNZVLb4pwoSdNO2iBKn2lA_qjegXePB";
+
+    const clienteSupabase =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    const formulario =
+      document.getElementById("formulario");
+
+    const boton =
+      document.getElementById("boton");
+
+    const mensaje =
+      document.getElementById("mensaje");
+
+    const resultado =
+      document.getElementById("resultado");
+
+
+    formulario.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+        resultado.style.display = "none";
+
+        mensaje.className = "cargando";
+        mensaje.textContent =
+          "Buscando tu acceso...";
+
+        boton.disabled = true;
+
+
+        const empresa =
+          document.getElementById("empresa")
+          .value.trim();
+
+        const numeroEmpleado =
+          document.getElementById("numeroEmpleado")
+          .value.trim()
+          .toUpperCase();
+
+        const ultimos4 =
+          document.getElementById("ultimos4")
+          .value.trim();
+
+
+        if (!/^\d{4}$/.test(ultimos4)) {
+
+          mostrarError(
+            "Ingresa exactamente los últimos 4 dígitos de tu celular."
+          );
+
+          boton.disabled = false;
+
+          return;
+        }
+
+
+        try {
+
+          const { data, error } =
+            await clienteSupabase.rpc(
+              "obtener_acceso",
+              {
+                p_empresa: empresa,
+                p_numero_empleado: numeroEmpleado,
+                p_ultimos_4_cel: ultimos4
+              }
+            );
+
+
+          if (error) {
+
+            console.error(error);
+
+            mostrarError(
+              "No fue posible consultar tu acceso. Intenta nuevamente."
+            );
+
+            return;
+          }
+
+
+          if (!data || data.length === 0) {
+
+            mostrarError(
+              "No encontramos un acceso con los datos proporcionados. Verifica la información e intenta nuevamente."
+            );
+
+            return;
+          }
+
+
+          const empleado = data[0];
+
+
+          mensaje.style.display = "none";
+          mensaje.className = "";
+
+
+          document.getElementById("nombre")
+            .textContent = empleado.nombre;
+
+          document.getElementById("empresaResultado")
+            .textContent = empleado.empresa;
+
+          document.getElementById("codigo")
+            .textContent = empleado.token_qr;
+
+
+          const contenedorQR =
+            document.getElementById("qrcode");
+
+          contenedorQR.innerHTML = "";
+
+
+          new QRCode(
+            contenedorQR,
+            {
+              text: empleado.token_qr,
+              width: 256,
+              height: 256,
+              correctLevel: QRCode.CorrectLevel.H
+            }
+          );
+
+
+          formulario.style.display = "none";
+
+          resultado.style.display = "block";
+
+
+        } catch (err) {
+
+          console.error(err);
+
+          mostrarError(
+            "Ocurrió un error de conexión. Intenta nuevamente."
+          );
+
+        } finally {
+
+          boton.disabled = false;
+
+        }
+
+      }
+    );
+
+
+    function mostrarError(texto) {
+
+      mensaje.className = "error";
+      mensaje.textContent = texto;
+
+    }
+
+  </script>
+
+</body>
+</html>
