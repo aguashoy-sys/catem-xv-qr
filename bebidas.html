@@ -6,7 +6,7 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>CATEM XV AÑOS - Comida</title>
+  <title>CATEM XV AÑOS - Bebidas</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
@@ -139,6 +139,14 @@
       margin-top: 5px;
     }
 
+    .pulsera {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+
     .disponibles {
       margin-top: 25px;
       font-size: 22px;
@@ -159,7 +167,7 @@
 
     .botones-cantidad {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-top: 18px;
     }
@@ -192,6 +200,15 @@
       cursor: pointer;
     }
 
+    .aviso-modulo {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #fff3cd;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
     .footer {
       margin-top: 30px;
       color: #7b1f32;
@@ -216,7 +233,7 @@
   </div>
 
   <div class="titulo">
-    🍽️ MÓDULO DE COMIDA
+    🥤 MÓDULO DE BEBIDAS
   </div>
 
   <div
@@ -278,7 +295,8 @@ const API_URL =
 // ======================================================
 // LEER MÓDULO DESDE LA URL
 //
-// comida.html?modulo=1
+// Ejemplo:
+// bebidas.html?modulo=1
 // ======================================================
 
 const parametros =
@@ -291,6 +309,7 @@ let MODULO =
     parametros.get("modulo")
   );
 
+
 if (
   !MODULO ||
   MODULO < 1 ||
@@ -298,15 +317,28 @@ if (
 ) {
 
   MODULO = 1;
-
 }
+
+
+const COLORES = {
+
+  1: "ROJO",
+  2: "AZUL",
+  3: "VERDE",
+  4: "AMARILLO",
+  5: "MORADO"
+
+};
 
 
 document
   .getElementById("moduloActual")
   .innerHTML =
   "MÓDULO " +
-  MODULO;
+  MODULO +
+  " — " +
+  COLORES[MODULO];
+
 
 
 let scanner = null;
@@ -450,7 +482,7 @@ function validarManual() {
 
 
 // ======================================================
-// CONSULTAR COMIDAS
+// CONSULTAR BEBIDAS
 // ======================================================
 
 async function consultarQR(qr) {
@@ -494,7 +526,7 @@ async function consultarQR(qr) {
           body: JSON.stringify({
 
             accion:
-              "consultarComidas",
+              "consultarBebidas",
 
             qr:
               qr,
@@ -551,15 +583,37 @@ function mostrarConsulta(datos) {
     );
 
 
-  // ==============================================
-  // RECHAZADO
-  // ==============================================
-
   if (!datos.autorizado) {
 
 
     resultado.className =
       "rechazado";
+
+
+    let adicional = "";
+
+
+    if (
+      datos.mensaje ==
+      "MÓDULO INCORRECTO"
+    ) {
+
+
+      adicional =
+
+        "<div class='aviso-modulo'>" +
+
+        "PULSERA " +
+        datos.colorPulsera +
+
+        "<br><br>" +
+
+        "DIRÍGETE AL MÓDULO " +
+        datos.moduloBebida +
+
+        "</div>";
+
+    }
 
 
     resultado.innerHTML =
@@ -603,24 +657,7 @@ function mostrarConsulta(datos) {
       ) +
 
 
-      (
-        datos.comidasDisponibles !==
-        undefined
-
-        ?
-
-        "<div class='disponibles'>" +
-        "COMIDAS DISPONIBLES" +
-        "</div>" +
-
-        "<div class='numero-disponibles'>" +
-        datos.comidasDisponibles +
-        "</div>"
-
-        :
-
-        ""
-      ) +
+      adicional +
 
 
       botonSiguiente();
@@ -631,18 +668,19 @@ function mostrarConsulta(datos) {
   }
 
 
-  // ==============================================
-  // AUTORIZADO
-  // ==============================================
-
-
   resultado.className =
     "correcto";
 
 
   const disponibles =
     Number(
-      datos.comidasDisponibles
+      datos.bebidasDisponibles
+    );
+
+
+  const estilo =
+    obtenerEstiloColor(
+      datos.colorPulsera
     );
 
 
@@ -662,7 +700,7 @@ function mostrarConsulta(datos) {
 
       "class='boton-cantidad' " +
 
-      "onclick='entregarComidas(" +
+      "onclick='entregarBebidas(" +
       i +
       ")'>" +
 
@@ -691,8 +729,19 @@ function mostrarConsulta(datos) {
     "</div>" +
 
 
+    "<div class='pulsera' " +
+    "style='" +
+    estilo +
+    "'>" +
+
+    "PULSERA " +
+    datos.colorPulsera +
+
+    "</div>" +
+
+
     "<div class='disponibles'>" +
-    "COMIDAS DISPONIBLES" +
+    "BEBIDAS DISPONIBLES" +
     "</div>" +
 
 
@@ -702,7 +751,7 @@ function mostrarConsulta(datos) {
 
 
     "<div class='pregunta'>" +
-    "¿Cuántas comidas se entregan?" +
+    "¿Cuántas bebidas se entregan?" +
     "</div>" +
 
 
@@ -714,10 +763,10 @@ function mostrarConsulta(datos) {
 
 
 // ======================================================
-// ENTREGAR COMIDAS
+// ENTREGAR BEBIDAS
 // ======================================================
 
-async function entregarComidas(
+async function entregarBebidas(
   cantidad
 ) {
 
@@ -727,8 +776,6 @@ async function entregarComidas(
       "resultado"
     );
 
-
-  // Evitar doble toque
 
   const botones =
     document.querySelectorAll(
@@ -771,7 +818,7 @@ async function entregarComidas(
           body: JSON.stringify({
 
             accion:
-              "registrarComidas",
+              "registrarBebidas",
 
             qr:
               qrActual,
@@ -857,21 +904,21 @@ function mostrarEntrega(datos) {
       (
         datos.cantidadEntregada == 1
 
-        ? " COMIDA ENTREGADA"
+        ? " BEBIDA ENTREGADA"
 
-        : " COMIDAS ENTREGADAS"
+        : " BEBIDAS ENTREGADAS"
       ) +
 
       "</div>" +
 
 
       "<div class='disponibles'>" +
-      "COMIDAS RESTANTES" +
+      "BEBIDAS RESTANTES" +
       "</div>" +
 
 
       "<div class='numero-disponibles'>" +
-      datos.comidasDisponibles +
+      datos.bebidasDisponibles +
       "</div>" +
 
 
@@ -897,7 +944,7 @@ function mostrarEntrega(datos) {
 
 
       (
-        datos.comidasDisponibles !==
+        datos.bebidasDisponibles !==
         undefined
 
         ?
@@ -905,7 +952,7 @@ function mostrarEntrega(datos) {
         "<div class='disponibles'>" +
 
         "DISPONIBLES: " +
-        datos.comidasDisponibles +
+        datos.bebidasDisponibles +
 
         "</div>"
 
@@ -969,6 +1016,70 @@ function siguientePersona() {
 
 
   iniciarScanner();
+
+}
+
+
+// ======================================================
+// COLOR DE PULSERA
+// ======================================================
+
+function obtenerEstiloColor(
+  color
+) {
+
+
+  switch (color) {
+
+
+    case "ROJO":
+
+      return (
+        "background:#d32f2f;" +
+        "color:white;"
+      );
+
+
+    case "AZUL":
+
+      return (
+        "background:#1976d2;" +
+        "color:white;"
+      );
+
+
+    case "VERDE":
+
+      return (
+        "background:#388e3c;" +
+        "color:white;"
+      );
+
+
+    case "AMARILLO":
+
+      return (
+        "background:#fbc02d;" +
+        "color:#222;"
+      );
+
+
+    case "MORADO":
+
+      return (
+        "background:#7b1fa2;" +
+        "color:white;"
+      );
+
+
+    default:
+
+      return (
+        "background:#eee;" +
+        "color:#222;"
+      );
+
+  }
 
 }
 
