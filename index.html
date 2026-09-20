@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>CATEM XV AÑOS</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 18px;
+      background: #f2f2f2;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #333;
+    }
+
+    .contenedor {
+      max-width: 460px;
+      margin: auto;
+      background: white;
+      padding: 28px 20px;
+      border-radius: 22px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.12);
+    }
+
+    .catem {
+      font-size: 48px;
+      font-weight: 900;
+      color: #111;
+      line-height: .9;
+    }
+
+    .xv {
+      font-size: 30px;
+      font-weight: 900;
+      color: #9d1d30;
+      margin-top: 8px;
+    }
+
+    .modulo {
+      font-size: 19px;
+      font-weight: bold;
+      color: #555;
+      margin: 12px 0 25px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 17px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .scanner-btn {
+      background: #9d1d30;
+      color: white;
+      font-size: 20px;
+    }
+
+    .manual-btn {
+      margin-top: 12px;
+      background: #3f3f3f;
+      color: white;
+    }
+
+    .siguiente-btn {
+      display: none;
+      margin-top: 18px;
+      background: #9d1d30;
+      color: white;
+      font-size: 20px;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 18px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+      background: #111;
+    }
+
+    #instruccion {
+      display: none;
+      margin-top: 10px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .separador {
+      display: flex;
+      align-items: center;
+      margin: 22px 0;
+      color: #888;
+    }
+
+    .separador:before,
+    .separador:after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #bbb;
+    }
+
+    .separador span {
+      margin: 0 12px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #ccc;
+      border-radius: 11px;
+      text-align: center;
+      font-size: 17px;
+    }
+
+    #resultado {
+      display: none;
+      margin-top: 22px;
+      padding: 22px 15px;
+      border-radius: 14px;
+    }
+
+    .autorizado {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #b7dfc2;
+    }
+
+    .rechazado {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #efb8bd;
+    }
+
+    .estado {
+      font-size: 25px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .persona {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .codigo {
+      font-size: 13px;
+      margin-top: 8px;
+      opacity: .7;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: #9d1d30;
+      font-size: 21px;
+      font-style: italic;
+      font-weight: bold;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+  <div class="catem">
+    CATEM
+  </div>
+
+  <div class="xv">
+    — XV AÑOS —
+  </div>
+
+  <div class="modulo">
+    MÓDULO DE RECEPCIÓN 1
+  </div>
+
+
+  <button
+    id="btnScanner"
+    class="scanner-btn"
+    onclick="iniciarScanner()">
+
+    📷 ESCANEAR QR
+
+  </button>
+
+
+  <div id="reader"></div>
+
+  <div id="instruccion">
+    Apunta la cámara al código QR.<br>
+    La lectura será automática.
+  </div>
+
+
+  <div id="zonaManual">
+
+    <div class="separador">
+      <span>ó</span>
+    </div>
+
+    <input
+      id="qrManual"
+      type="text"
+      placeholder="Ingresa el código manualmente"
+      autocomplete="off"
+    >
+
+    <button
+      class="manual-btn"
+      onclick="validarManual()">
+
+      ✓ VALIDAR MANUALMENTE
+
+    </button>
+
+  </div>
+
+
+  <div id="resultado"></div>
+
+
+  <button
+    id="btnSiguiente"
+    class="siguiente-btn"
+    onclick="siguientePersona()">
+
+    SIGUIENTE PERSONA →
+
+  </button>
+
+
+  <div class="footer">
+    Juntos hacemos más
+  </div>
+
+</div>
+
+
+<script>
+
+/* ======================================
+   CONFIGURACIÓN
+====================================== */
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
+
+const MODULO =
+  "RECEPCIÓN 1";
+
+
+let lector = null;
+
+let scannerActivo = false;
+
+let procesando = false;
+
+
+/* ======================================
+   INICIAR ESCÁNER
+====================================== */
+
+async function iniciarScanner() {
+
+  if (scannerActivo || procesando) {
+    return;
+  }
+
+  document.getElementById("resultado")
+    .style.display = "none";
+
+  document.getElementById("btnSiguiente")
+    .style.display = "none";
+
+  document.getElementById("reader")
+    .style.display = "block";
+
+  document.getElementById("instruccion")
+    .style.display = "block";
+
+
+  lector = new Html5Qrcode("reader");
+
+
+  try {
+
+    await lector.start(
+
+      {
+        facingMode: "environment"
+      },
+
+      {
+        fps: 10,
+
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+      },
+
+      function(decodedText) {
+
+        qrDetectado(decodedText);
+
+      },
+
+      function() {
+
+        // Continúa buscando.
+
+      }
+
+    );
+
+
+    scannerActivo = true;
+
+
+  } catch (error) {
+
+    document.getElementById("reader")
+      .style.display = "none";
+
+    document.getElementById("instruccion")
+      .style.display = "none";
+
+    alert(
+      "No se pudo abrir la cámara. " +
+      "Verifica los permisos del navegador."
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* ======================================
+   QR DETECTADO
+====================================== */
+
+async function qrDetectado(texto) {
+
+  if (procesando) {
+    return;
+  }
+
+
+  procesando = true;
+
+
+  if (lector && scannerActivo) {
+
+    try {
+
+      await lector.stop();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }
+
+
+  scannerActivo = false;
+
+
+  document.getElementById("reader")
+    .style.display = "none";
+
+  document.getElementById("instruccion")
+    .style.display = "none";
+
+
+  validarQR(texto.trim());
+
+}
+
+
+/* ======================================
+   VALIDACIÓN MANUAL
+====================================== */
+
+function validarManual() {
+
+  if (procesando) {
+    return;
+  }
+
+
+  const qr =
+    document.getElementById("qrManual")
+      .value
+      .trim();
+
+
+  if (!qr) {
+
+    alert("Ingresa un código.");
+
+    return;
+
+  }
+
+
+  procesando = true;
+
+  validarQR(qr);
+
+}
+
+
+/* ======================================
+   ENVIAR QR AL SISTEMA
+====================================== */
+
+async function validarQR(qr) {
+
+  const resultado =
+    document.getElementById("resultado");
+
+
+  resultado.style.display = "block";
+
+  resultado.className = "";
+
+  resultado.innerHTML =
+    '<div class="estado">⏳ VALIDANDO...</div>';
+
+
+  try {
+
+    const respuesta = await fetch(
+
+      API_URL,
+
+      {
+        method: "POST",
+
+        body: JSON.stringify({
+          qr: qr,
+          modulo: MODULO
+        })
+      }
+
+    );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    mostrarResultado(
+      datos,
+      qr
+    );
+
+
+  } catch (error) {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+      '<div class="estado">' +
+
+      '⚠️ ERROR DE CONEXIÓN' +
+
+      '</div>' +
+
+      '<div class="persona">' +
+
+      'No fue posible consultar el sistema.' +
+
+      '</div>';
+
+
+    document.getElementById("btnSiguiente")
+      .style.display = "block";
+
+
+    console.error(error);
+
+  }
+
+
+  procesando = false;
+
+}
+
+
+/* ======================================
+   MOSTRAR RESULTADO
+====================================== */
+
+function mostrarResultado(datos, qr) {
+
+  const resultado =
+    document.getElementById("resultado");
+
+
+  if (datos.autorizado) {
+
+
+    resultado.className =
+      "autorizado";
+
+
+    resultado.innerHTML =
+
+      '<div class="estado">' +
+
+      '✅ ACCESO AUTORIZADO' +
+
+      '</div>' +
+
+      '<div class="persona">' +
+
+      '<strong>' +
+
+      datos.nombre +
+
+      '</strong><br>' +
+
+      datos.empresa +
+
+      '</div>' +
+
+      '<div class="codigo">' +
+
+      qr +
+
+      '</div>';
+
+
+  } else {
+
+
+    resultado.className =
+      "rechazado";
+
+
+    resultado.innerHTML =
+
+      '<div class="estado">' +
+
+      '⛔ ACCESO DENEGADO' +
+
+      '</div>' +
+
+      '<div class="persona">' +
+
+      datos.mensaje +
+
+      '</div>' +
+
+      '<div class="codigo">' +
+
+      qr +
+
+      '</div>';
+
+  }
+
+
+  document.getElementById("qrManual")
+    .value = "";
+
+
+  document.getElementById("btnSiguiente")
+    .style.display = "block";
+
+}
+
+
+/* ======================================
+   SIGUIENTE PERSONA
+====================================== */
+
+function siguientePersona() {
+
+
+  document.getElementById("resultado")
+    .style.display = "none";
+
+
+  document.getElementById("btnSiguiente")
+    .style.display = "none";
+
+
+  procesando = false;
+
+
+  iniciarScanner();
+
+}
+
+</script>
+
+</body>
+
+</html>
