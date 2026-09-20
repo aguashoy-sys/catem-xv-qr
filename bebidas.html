@@ -6,7 +6,7 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>CATEM XV AÑOS - Bebidas</title>
+  <title>CATEM XV AÑOS - Comida</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
@@ -139,14 +139,6 @@
       margin-top: 5px;
     }
 
-    .pulsera {
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 12px;
-      font-size: 25px;
-      font-weight: 900;
-    }
-
     .disponibles {
       margin-top: 25px;
       font-size: 22px;
@@ -167,7 +159,7 @@
 
     .botones-cantidad {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       margin-top: 18px;
     }
@@ -200,15 +192,6 @@
       cursor: pointer;
     }
 
-    .aviso-modulo {
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 10px;
-      background: #fff3cd;
-      font-size: 21px;
-      font-weight: bold;
-    }
-
     .footer {
       margin-top: 30px;
       color: #7b1f32;
@@ -233,7 +216,7 @@
   </div>
 
   <div class="titulo">
-    🥤 MÓDULO DE BEBIDAS
+    🍽️ MÓDULO DE COMIDA
   </div>
 
   <div
@@ -295,8 +278,7 @@ const API_URL =
 // ======================================================
 // LEER MÓDULO DESDE LA URL
 //
-// Ejemplo:
-// bebidas.html?modulo=1
+// comida.html?modulo=1
 // ======================================================
 
 const parametros =
@@ -309,10 +291,6 @@ let MODULO =
     parametros.get("modulo")
   );
 
-
-// Si no se especifica módulo,
-// usamos módulo 1 para la prueba.
-
 if (
   !MODULO ||
   MODULO < 1 ||
@@ -320,28 +298,15 @@ if (
 ) {
 
   MODULO = 1;
+
 }
-
-
-const COLORES = {
-
-  1: "ROJO",
-  2: "AZUL",
-  3: "VERDE",
-  4: "AMARILLO",
-  5: "MORADO"
-
-};
 
 
 document
   .getElementById("moduloActual")
   .innerHTML =
   "MÓDULO " +
-  MODULO +
-  " — " +
-  COLORES[MODULO];
-
+  MODULO;
 
 
 let scanner = null;
@@ -485,7 +450,7 @@ function validarManual() {
 
 
 // ======================================================
-// CONSULTAR BEBIDAS
+// CONSULTAR COMIDAS
 // ======================================================
 
 async function consultarQR(qr) {
@@ -529,7 +494,7 @@ async function consultarQR(qr) {
           body: JSON.stringify({
 
             accion:
-              "consultarBebidas",
+              "consultarComidas",
 
             qr:
               qr,
@@ -597,32 +562,6 @@ function mostrarConsulta(datos) {
       "rechazado";
 
 
-    let adicional = "";
-
-
-    if (
-      datos.mensaje ==
-      "MÓDULO INCORRECTO"
-    ) {
-
-
-      adicional =
-
-        "<div class='aviso-modulo'>" +
-
-        "PULSERA " +
-        datos.colorPulsera +
-
-        "<br><br>" +
-
-        "DIRÍGETE AL MÓDULO " +
-        datos.moduloBebida +
-
-        "</div>";
-
-    }
-
-
     resultado.innerHTML =
 
 
@@ -664,7 +603,24 @@ function mostrarConsulta(datos) {
       ) +
 
 
-      adicional +
+      (
+        datos.comidasDisponibles !==
+        undefined
+
+        ?
+
+        "<div class='disponibles'>" +
+        "COMIDAS DISPONIBLES" +
+        "</div>" +
+
+        "<div class='numero-disponibles'>" +
+        datos.comidasDisponibles +
+        "</div>"
+
+        :
+
+        ""
+      ) +
 
 
       botonSiguiente();
@@ -686,13 +642,7 @@ function mostrarConsulta(datos) {
 
   const disponibles =
     Number(
-      datos.bebidasDisponibles
-    );
-
-
-  const estilo =
-    obtenerEstiloColor(
-      datos.colorPulsera
+      datos.comidasDisponibles
     );
 
 
@@ -712,7 +662,7 @@ function mostrarConsulta(datos) {
 
       "class='boton-cantidad' " +
 
-      "onclick='entregarBebidas(" +
+      "onclick='entregarComidas(" +
       i +
       ")'>" +
 
@@ -741,19 +691,8 @@ function mostrarConsulta(datos) {
     "</div>" +
 
 
-    "<div class='pulsera' " +
-    "style='" +
-    estilo +
-    "'>" +
-
-    "PULSERA " +
-    datos.colorPulsera +
-
-    "</div>" +
-
-
     "<div class='disponibles'>" +
-    "BEBIDAS DISPONIBLES" +
+    "COMIDAS DISPONIBLES" +
     "</div>" +
 
 
@@ -763,7 +702,7 @@ function mostrarConsulta(datos) {
 
 
     "<div class='pregunta'>" +
-    "¿Cuántas bebidas se entregan?" +
+    "¿Cuántas comidas se entregan?" +
     "</div>" +
 
 
@@ -775,10 +714,10 @@ function mostrarConsulta(datos) {
 
 
 // ======================================================
-// ENTREGAR BEBIDAS
+// ENTREGAR COMIDAS
 // ======================================================
 
-async function entregarBebidas(
+async function entregarComidas(
   cantidad
 ) {
 
@@ -832,7 +771,7 @@ async function entregarBebidas(
           body: JSON.stringify({
 
             accion:
-              "registrarBebidas",
+              "registrarComidas",
 
             qr:
               qrActual,
@@ -918,21 +857,21 @@ function mostrarEntrega(datos) {
       (
         datos.cantidadEntregada == 1
 
-        ? " BEBIDA ENTREGADA"
+        ? " COMIDA ENTREGADA"
 
-        : " BEBIDAS ENTREGADAS"
+        : " COMIDAS ENTREGADAS"
       ) +
 
       "</div>" +
 
 
       "<div class='disponibles'>" +
-      "BEBIDAS RESTANTES" +
+      "COMIDAS RESTANTES" +
       "</div>" +
 
 
       "<div class='numero-disponibles'>" +
-      datos.bebidasDisponibles +
+      datos.comidasDisponibles +
       "</div>" +
 
 
@@ -958,7 +897,7 @@ function mostrarEntrega(datos) {
 
 
       (
-        datos.bebidasDisponibles !==
+        datos.comidasDisponibles !==
         undefined
 
         ?
@@ -966,7 +905,7 @@ function mostrarEntrega(datos) {
         "<div class='disponibles'>" +
 
         "DISPONIBLES: " +
-        datos.bebidasDisponibles +
+        datos.comidasDisponibles +
 
         "</div>"
 
@@ -1030,70 +969,6 @@ function siguientePersona() {
 
 
   iniciarScanner();
-
-}
-
-
-// ======================================================
-// COLOR DE PULSERA
-// ======================================================
-
-function obtenerEstiloColor(
-  color
-) {
-
-
-  switch (color) {
-
-
-    case "ROJO":
-
-      return (
-        "background:#d32f2f;" +
-        "color:white;"
-      );
-
-
-    case "AZUL":
-
-      return (
-        "background:#1976d2;" +
-        "color:white;"
-      );
-
-
-    case "VERDE":
-
-      return (
-        "background:#388e3c;" +
-        "color:white;"
-      );
-
-
-    case "AMARILLO":
-
-      return (
-        "background:#fbc02d;" +
-        "color:#222;"
-      );
-
-
-    case "MORADO":
-
-      return (
-        "background:#7b1fa2;" +
-        "color:white;"
-      );
-
-
-    default:
-
-      return (
-        "background:#eee;" +
-        "color:#222;"
-      );
-
-  }
 
 }
 
