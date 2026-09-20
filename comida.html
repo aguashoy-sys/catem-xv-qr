@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    CATEM XV AÑOS - Comidas
+  </title>
+
+  <script
+    src="https://unpkg.com/html5-qrcode"
+  ></script>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      text-align: center;
+      color: #222;
+    }
+
+    .contenedor {
+      max-width: 520px;
+      margin: auto;
+    }
+
+    .encabezado {
+      background: #111;
+      color: white;
+      padding: 22px 15px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+    }
+
+    .catem {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .aniversario {
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .tipo-modulo {
+      margin-top: 12px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    #numeroModulo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,0.10);
+    }
+
+    #reader {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .manual {
+      margin-top: 18px;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #bbb;
+      font-size: 18px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .boton-consultar {
+      background: #222;
+      color: white;
+    }
+
+    .boton-entrega {
+      background: #222;
+      color: white;
+      font-size: 20px;
+      padding: 18px;
+    }
+
+    .boton-nuevo {
+      background: #e5e5e5;
+      color: #222;
+    }
+
+    #resultado {
+      display: none;
+    }
+
+    .nombre {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .empresa {
+      font-size: 17px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .saldo {
+      font-size: 56px;
+      font-weight: bold;
+      line-height: 1;
+      margin: 12px 0;
+    }
+
+    .texto-saldo {
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    .exito {
+      border: 3px solid #198754;
+    }
+
+    .error {
+      border: 3px solid #dc3545;
+    }
+
+    .mensaje-exito {
+      font-size: 25px;
+      font-weight: bold;
+      color: #198754;
+      margin-bottom: 15px;
+    }
+
+    .mensaje-error {
+      font-size: 24px;
+      font-weight: bold;
+      color: #dc3545;
+      margin-bottom: 15px;
+    }
+
+    .cargando {
+      font-size: 18px;
+      font-weight: bold;
+      padding: 20px;
+    }
+
+    .nota {
+      font-size: 14px;
+      color: #777;
+      margin-top: 12px;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+<div class="contenedor">
+
+
+  <!-- ENCABEZADO -->
+
+  <div class="encabezado">
+
+    <div class="catem">
+      CATEM
+    </div>
+
+    <div class="aniversario">
+      XV AÑOS
+    </div>
+
+    <div class="tipo-modulo">
+      MÓDULO DE COMIDA
+    </div>
+
+    <div id="numeroModulo">
+      MÓDULO -
+    </div>
+
+  </div>
+
+
+  <!-- ESCÁNER -->
+
+  <div
+    class="tarjeta"
+    id="zonaScanner"
+  >
+
+    <div id="reader"></div>
+
+
+    <div class="manual">
+
+      <input
+        type="text"
+        id="qrManual"
+        placeholder="CATEM-00001"
+      >
+
+      <button
+        class="boton-consultar"
+        onclick="consultarManual()"
+      >
+        CONSULTAR QR
+      </button>
+
+    </div>
+
+    <div class="nota">
+      Escanear el QR no descuenta comidas.
+    </div>
+
+  </div>
+
+
+  <!-- RESULTADO -->
+
+  <div
+    class="tarjeta"
+    id="resultado"
+  >
+  </div>
+
+
+</div>
+
+
+<script>
+
+
+// ======================================================
+// CONFIGURACIÓN
+// ======================================================
+
+
+// IMPORTANTE:
+//
+// Copia aquí EXACTAMENTE el mismo API_URL
+// que tienes actualmente en bebidas.html.
+//
+// Ejemplo de estructura:
+//
+// const API_URL =
+// "https://script.google.com/macros/s/XXXXXXXX/exec";
+//
+// NO uses el ejemplo.
+// Pega tu URL real.
+
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycby9w6dVDOKHskXgvt28-usSj3QfylFlmm4SqhanNHLJcjQRmQ2FPdDoJiVMejc6LgkKfw/exec";
+
+
+
+// ======================================================
+// OBTENER MÓDULO DESDE LA URL
+//
+// comida.html?modulo=1
+// comida.html?modulo=2
+// etc.
+// ======================================================
+
+const parametros =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+let MODULO =
+  Number(
+    parametros.get("modulo")
+  );
+
+
+if (
+  !Number.isInteger(MODULO) ||
+  MODULO < 1 ||
+  MODULO > 5
+) {
+
+  MODULO = 1;
+
+}
+
+
+document
+  .getElementById(
+    "numeroModulo"
+  )
+  .textContent =
+    "MÓDULO " + MODULO;
+
+
+
+// ======================================================
+// VARIABLES
+// ======================================================
+
+let qrActual = "";
+
+let procesando = false;
+
+let ultimoQR = "";
+
+let ultimoEscaneo = 0;
+
+
+
+// ======================================================
+// ESCÁNER
+// ======================================================
+
+const lector =
+  new Html5QrcodeScanner(
+
+    "reader",
+
+    {
+      fps: 10,
+
+      qrbox: {
+        width: 250,
+        height: 250
+      }
+    },
+
+    false
+
+  );
+
+
+lector.render(
+
+  qrLeido,
+
+  errorLectura
+
+);
+
+
+
+// ======================================================
+// QR LEÍDO
+// ======================================================
+
+function qrLeido(
+  texto
+) {
+
+  const qr =
+    String(texto)
+      .trim()
+      .toUpperCase();
+
+
+  const ahora =
+    Date.now();
+
+
+  // Evita múltiples consultas
+  // inmediatas del mismo QR.
+
+  if (
+    qr === ultimoQR &&
+    ahora - ultimoEscaneo < 3000
+  ) {
+
+    return;
+
+  }
+
+
+  if (procesando) {
+    return;
+  }
+
+
+  ultimoQR =
+    qr;
+
+  ultimoEscaneo =
+    ahora;
+
+
+  consultarQR(qr);
+
+}
+
+
+
+// ======================================================
+// ERROR NORMAL DE LECTURA
+// ======================================================
+
+function errorLectura(
+  error
+) {
+
+  // No mostramos nada.
+  // La cámara intenta leer
+  // continuamente.
+
+}
+
+
+
+// ======================================================
+// CONSULTA MANUAL
+// ======================================================
+
+function consultarManual() {
+
+  const input =
+    document.getElementById(
+      "qrManual"
+    );
+
+
+  const qr =
+    input.value
+      .trim()
+      .toUpperCase();
+
+
+  if (!qr) {
+
+    mostrarError(
+      "INGRESA UN QR"
+    );
+
+    return;
+
+  }
+
+
+  consultarQR(qr);
+
+}
+
+
+
+// ======================================================
+// CONSULTAR COMIDAS
+// ======================================================
+
+async function consultarQR(
+  qr
+) {
+
+  if (procesando) {
+    return;
+  }
+
+
+  procesando =
+    true;
+
+
+  qrActual =
+    qr;
+
+
+  mostrarCargando(
+    "CONSULTANDO..."
+  );
+
+
+  try {
+
+    const respuesta =
+      await fetch(
+        API_URL,
+        {
+
+          method: "POST",
+
+          body:
+            JSON.stringify({
+
+              accion:
+                "consultarComidas",
+
+              qr:
+                qr,
+
+              modulo:
+                MODULO
+
+            })
+
+        }
+      );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    if (
+      !datos.autorizado
+    ) {
+
+      mostrarError(
+        datos.mensaje ||
+        "OPERACIÓN NO AUTORIZADA",
+        datos
+      );
+
+      return;
+
+    }
+
+
+    mostrarComidas(
+      datos
+    );
+
+
+  } catch (error) {
+
+    mostrarError(
+      "ERROR DE CONEXIÓN"
+    );
+
+  } finally {
+
+    procesando =
+      false;
+
+  }
+
+}
+
+
+
+// ======================================================
+// MOSTRAR COMIDAS DISPONIBLES
+// ======================================================
+
+function mostrarComidas(
+  datos
+) {
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  resultado.className =
+    "tarjeta exito";
+
+
+  resultado.style.display =
+    "block";
+
+
+  const disponibles =
+    Number(
+      datos.comidasDisponibles
+    );
+
+
+  let botones = "";
+
+
+  if (
+    disponibles >= 1
+  ) {
+
+    botones += `
+
+      <button
+        class="boton-entrega"
+        onclick="entregarComidas(1)"
+      >
+        ENTREGAR 1 COMIDA
+      </button>
+
+    `;
+
+  }
+
+
+  if (
+    disponibles >= 2
+  ) {
+
+    botones += `
+
+      <button
+        class="boton-entrega"
+        onclick="entregarComidas(2)"
+      >
+        ENTREGAR 2 COMIDAS
+      </button>
+
+    `;
+
+  }
+
+
+  resultado.innerHTML = `
+
+    <div class="mensaje-exito">
+      QR AUTORIZADO
+    </div>
+
+    <div class="nombre">
+      ${escaparHTML(
+        datos.nombre
+      )}
+    </div>
+
+    <div class="empresa">
+      ${escaparHTML(
+        datos.empresa
+      )}
+    </div>
+
+    <div class="saldo">
+      ${disponibles}
+    </div>
+
+    <div class="texto-saldo">
+      COMIDAS DISPONIBLES
+    </div>
+
+    ${botones}
+
+    <button
+      class="boton-nuevo"
+      onclick="nuevoQR()"
+    >
+      ESCANEAR OTRO QR
+    </button>
+
+  `;
+
+}
+
+
+
+// ======================================================
+// ENTREGAR COMIDAS
+// ======================================================
+
+async function entregarComidas(
+  cantidad
+) {
+
+  if (procesando) {
+    return;
+  }
+
+
+  if (!qrActual) {
+
+    mostrarError(
+      "NO HAY QR SELECCIONADO"
+    );
+
+    return;
+
+  }
+
+
+  procesando =
+    true;
+
+
+  mostrarCargando(
+    "REGISTRANDO ENTREGA..."
+  );
+
+
+  try {
+
+    const respuesta =
+      await fetch(
+        API_URL,
+        {
+
+          method: "POST",
+
+          body:
+            JSON.stringify({
+
+              accion:
+                "registrarComidas",
+
+              qr:
+                qrActual,
+
+              modulo:
+                MODULO,
+
+              cantidad:
+                cantidad
+
+            })
+
+        }
+      );
+
+
+    const datos =
+      await respuesta.json();
+
+
+    if (
+      !datos.autorizado
+    ) {
+
+      mostrarError(
+        datos.mensaje ||
+        "ENTREGA NO AUTORIZADA",
+        datos
+      );
+
+      return;
+
+    }
+
+
+    mostrarEntrega(
+      datos
+    );
+
+
+  } catch (error) {
+
+    mostrarError(
+      "ERROR DE CONEXIÓN"
+    );
+
+  } finally {
+
+    procesando =
+      false;
+
+  }
+
+}
+
+
+
+// ======================================================
+// ENTREGA EXITOSA
+// ======================================================
+
+function mostrarEntrega(
+  datos
+) {
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  resultado.className =
+    "tarjeta exito";
+
+
+  resultado.style.display =
+    "block";
+
+
+  const cantidad =
+    Number(
+      datos.cantidadEntregada
+    );
+
+
+  const restantes =
+    Number(
+      datos.comidasDisponibles
+    );
+
+
+  const palabra =
+    cantidad === 1
+      ? "COMIDA ENTREGADA"
+      : "COMIDAS ENTREGADAS";
+
+
+  resultado.innerHTML = `
+
+    <div class="mensaje-exito">
+      ✓ ${palabra}
+    </div>
+
+    <div class="nombre">
+      ${escaparHTML(
+        datos.nombre
+      )}
+    </div>
+
+    <div class="empresa">
+      ${escaparHTML(
+        datos.empresa
+      )}
+    </div>
+
+    <div>
+      Se entregaron:
+    </div>
+
+    <div class="saldo">
+      ${cantidad}
+    </div>
+
+    <div class="texto-saldo">
+      ${
+        cantidad === 1
+        ? "COMIDA"
+        : "COMIDAS"
+      }
+    </div>
+
+    <hr>
+
+    <div>
+      RESTANTES
+    </div>
+
+    <div
+      class="saldo"
+      style="font-size:40px;"
+    >
+      ${restantes}
+    </div>
+
+    <button
+      class="boton-nuevo"
+      onclick="nuevoQR()"
+    >
+      ESCANEAR SIGUIENTE QR
+    </button>
+
+  `;
+
+
+  // Evita que la cámara vuelva
+  // a detectar inmediatamente
+  // el mismo código.
+
+  ultimoQR =
+    qrActual;
+
+  ultimoEscaneo =
+    Date.now();
+
+}
+
+
+
+// ======================================================
+// MOSTRAR ERROR
+// ======================================================
+
+function mostrarError(
+  mensaje,
+  datos = {}
+) {
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  resultado.className =
+    "tarjeta error";
+
+
+  resultado.style.display =
+    "block";
+
+
+  let informacion = "";
+
+
+  if (datos.nombre) {
+
+    informacion += `
+
+      <div class="nombre">
+        ${escaparHTML(
+          datos.nombre
+        )}
+      </div>
+
+    `;
+
+  }
+
+
+  if (datos.empresa) {
+
+    informacion += `
+
+      <div class="empresa">
+        ${escaparHTML(
+          datos.empresa
+        )}
+      </div>
+
+    `;
+
+  }
+
+
+  if (
+    datos.comidasDisponibles !==
+    undefined
+  ) {
+
+    informacion += `
+
+      <div>
+        COMIDAS DISPONIBLES
+      </div>
+
+      <div class="saldo">
+        ${
+          Number(
+            datos.comidasDisponibles
+          )
+        }
+      </div>
+
+    `;
+
+  }
+
+
+  resultado.innerHTML = `
+
+    <div class="mensaje-error">
+      ${escaparHTML(
+        mensaje
+      )}
+    </div>
+
+    ${informacion}
+
+    <button
+      class="boton-nuevo"
+      onclick="nuevoQR()"
+    >
+      ESCANEAR OTRO QR
+    </button>
+
+  `;
+
+
+  procesando =
+    false;
+
+}
+
+
+
+// ======================================================
+// CARGANDO
+// ======================================================
+
+function mostrarCargando(
+  texto
+) {
+
+  const resultado =
+    document.getElementById(
+      "resultado"
+    );
+
+
+  resultado.className =
+    "tarjeta";
+
+
+  resultado.style.display =
+    "block";
+
+
+  resultado.innerHTML = `
+
+    <div class="cargando">
+      ${escaparHTML(texto)}
+    </div>
+
+  `;
+
+}
+
+
+
+// ======================================================
+// NUEVO QR
+// ======================================================
+
+function nuevoQR() {
+
+  qrActual =
+    "";
+
+
+  procesando =
+    false;
+
+
+  document
+    .getElementById(
+      "qrManual"
+    )
+    .value =
+      "";
+
+
+  document
+    .getElementById(
+      "resultado"
+    )
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById(
+      "qrManual"
+    )
+    .focus();
+
+}
+
+
+
+// ======================================================
+// SEGURIDAD BÁSICA DE TEXTO
+// ======================================================
+
+function escaparHTML(
+  texto
+) {
+
+  return String(
+    texto || ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+</script>
+
+</body>
+
+</html>
